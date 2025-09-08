@@ -1,0 +1,43 @@
+{
+  "productName": "AI File Organizer",
+  "version": "1.0.0",
+  "identifier": "com.moharnab.ai-file-organizer",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "devUrl": "http://localhost:1420",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "AI File Organizer",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false,
+        "decorations": true,
+        "alwaysOnTop": false,
+        "skipTaskbar": false,
+        "theme": null
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": false,
+    "targets": "all",
+    "icon": [],
+    "resources": [],
+    "externalBin": [],
+    "copyright": "",
+    "category": "Productivity",
+    "shortDescription": "AI-powered file organization tool",
+    "longDescription": "An intelligent file organization application that uses AI to categorize and organize files using the Johnny Decimal system."
+  },
+  "plugins": {}
+}

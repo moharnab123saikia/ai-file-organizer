@@ -1,0 +1,61 @@
+[package]
+name = "ai-file-organizer"
+version = "1.0.0"
+description = "AI-powered file organization tool using Johnny Decimal system"
+authors = ["Moharnab"]
+license = "MIT"
+repository = ""
+default-run = "ai-file-organizer"
+edition = "2021"
+rust-version = "1.70"
+
+[build-dependencies]
+tauri-build = { version = "2.0", features = [] }
+
+[dependencies]
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+tauri = { version = "2.0", features = [
+    "devtools"
+] }
+tauri-plugin-dialog = "2.0"
+tauri-plugin-fs = "2.0"
+tauri-plugin-shell = "2.0"
+
+# File system operations
+walkdir = "2.4"
+tokio = { version = "1.35", features = ["full"] }
+
+# AI and HTTP
+reqwest = { version = "0.11", features = ["json"] }
+
+# Database
+rusqlite = { version = "0.31", features = ["bundled"] }
+
+# Error handling
+anyhow = "1.0"
+thiserror = "1.0"
+
+# Utilities
+uuid = { version = "1.6", features = ["v4"] }
+chrono = { version = "0.4", features = ["serde"] }
+sha2 = "0.10"
+mime_guess = "2.0"
+
+# Logging
+log = "0.4"
+env_logger = "0.10"
+
+[dev-dependencies]
+mockall = "0.12"
+tempfile = "3.8"
+
+[features]
+# this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.
+# If you use cargo directly instead of tauri's cli you can use this feature flag to switch between tauri's `dev` and `build` modes.
+# DO NOT REMOVE!!
+custom-protocol = [ "tauri/custom-protocol" ]
+
+[[bin]]
+name = "ai-file-organizer"
+path = "src/main.rs"
