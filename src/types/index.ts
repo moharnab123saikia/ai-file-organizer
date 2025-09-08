@@ -683,6 +683,36 @@ export interface CategoryRule {
 }
 
 // ================================
+// Organization Engine Types
+// ================================
+
+export interface JohnnyDecimalConfiguration {
+  maxAreas: number;
+  maxCategoriesPerArea: number;
+  maxItemsPerCategory: number;
+  autoCreateStructure: boolean;
+  conflictResolution: 'ask' | 'skip' | 'overwrite' | 'rename' | 'merge';
+}
+
+export interface OrganizationSuggestion {
+  file: FileInfo;
+  suggestedArea: {
+    number: number;
+    name: string;
+  };
+  suggestedCategory: {
+    number: number;
+    name: string;
+  };
+  suggestedItem?: {
+    number: string;
+    name: string;
+  };
+  confidence: number;
+  reasoning: string;
+}
+
+// ================================
 // Export all types
 // ================================
 
