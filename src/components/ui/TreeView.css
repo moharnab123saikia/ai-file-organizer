@@ -1,0 +1,238 @@
+/* TreeView Component Styles */
+.tree-view {
+  @apply w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.tree-view:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-opacity-50;
+}
+
+.tree-view--empty {
+  @apply flex items-center justify-center;
+}
+
+.tree-view__empty-state {
+  @apply text-gray-500 dark:text-gray-400 text-center;
+}
+
+.tree-view__empty-state p {
+  @apply text-base font-medium;
+}
+
+/* Tree Node Styles */
+.tree-node {
+  @apply relative flex items-center py-1 px-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150;
+  user-select: none;
+}
+
+.tree-node:focus {
+  @apply outline-none;
+}
+
+.tree-node--selected {
+  @apply bg-blue-100 dark:bg-blue-900/30 text-blue-900 dark:text-blue-100;
+}
+
+.tree-node--focused {
+  @apply ring-1 ring-blue-500 ring-inset;
+}
+
+.tree-node--drag-over {
+  @apply bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500;
+}
+
+.tree-node--directory {
+  @apply font-medium;
+}
+
+.tree-node--file {
+  @apply text-gray-700 dark:text-gray-300;
+}
+
+.tree-node__content {
+  @apply flex items-center gap-2 flex-1 min-w-0;
+}
+
+/* Expand/Collapse Button */
+.tree-node__expand-toggle {
+  @apply flex items-center justify-center w-4 h-4 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-150;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 4px;
+}
+
+.tree-node__expand-toggle:focus {
+  @apply outline-none ring-1 ring-blue-500 rounded;
+}
+
+.tree-node__expand-icon {
+  @apply w-4 h-4 transition-transform duration-200;
+}
+
+.tree-node__expand-icon--expanded {
+  transform: rotate(0deg);
+}
+
+/* Node Icons */
+.tree-node__icon {
+  @apply flex items-center justify-center w-4 h-4 flex-shrink-0;
+}
+
+.tree-node__folder-icon {
+  @apply w-4 h-4 text-blue-500 dark:text-blue-400;
+}
+
+.tree-node__file-icon {
+  @apply w-4 h-4 text-gray-500 dark:text-gray-400;
+}
+
+/* Node Name */
+.tree-node__name {
+  @apply flex-1 truncate font-medium;
+}
+
+.tree-node--file .tree-node__name {
+  @apply font-normal;
+}
+
+/* File Size */
+.tree-node__size {
+  @apply text-xs text-gray-400 dark:text-gray-500 ml-auto flex-shrink-0;
+}
+
+/* Children Container */
+.tree-node__children {
+  @apply ml-4;
+}
+
+/* Drag and Drop States */
+.tree-node[draggable="true"] {
+  @apply transition-opacity duration-200;
+}
+
+.tree-node[draggable="true"]:active {
+  @apply opacity-50;
+}
+
+/* Selection States */
+.tree-node--selected .tree-node__name {
+  @apply text-blue-900 dark:text-blue-100;
+}
+
+.tree-node--selected .tree-node__size {
+  @apply text-blue-700 dark:text-blue-300;
+}
+
+.tree-node--selected .tree-node__folder-icon {
+  @apply text-blue-600 dark:text-blue-300;
+}
+
+.tree-node--selected .tree-node__file-icon {
+  @apply text-blue-600 dark:text-blue-300;
+}
+
+/* Hover States */
+.tree-node:hover .tree-node__expand-toggle {
+  @apply text-gray-600 dark:text-gray-300;
+}
+
+.tree-node:hover .tree-node__folder-icon {
+  @apply text-blue-600 dark:text-blue-300;
+}
+
+.tree-node:hover .tree-node__file-icon {
+  @apply text-gray-600 dark:text-gray-300;
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+  .tree-node__expand-icon,
+  .tree-node {
+    transition: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .tree-node {
+    @apply border-b border-gray-300 dark:border-gray-600;
+  }
+  
+  .tree-node--selected {
+    @apply bg-blue-600 text-white;
+  }
+  
+  .tree-node--focused {
+    @apply ring-2 ring-black dark:ring-white;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .tree-node {
+    @apply py-2 px-3;
+  }
+  
+  .tree-node__content {
+    @apply gap-3;
+  }
+  
+  .tree-node__expand-toggle {
+    @apply w-6 h-6;
+  }
+  
+  .tree-node__expand-icon {
+    @apply w-5 h-5;
+  }
+  
+  .tree-node__icon {
+    @apply w-5 h-5;
+  }
+  
+  .tree-node__folder-icon,
+  .tree-node__file-icon {
+    @apply w-5 h-5;
+  }
+}
+
+/* Touch Device Improvements */
+@media (pointer: coarse) {
+  .tree-node {
+    @apply py-3 px-4;
+  }
+  
+  .tree-node__expand-toggle {
+    @apply w-8 h-8;
+  }
+}
+
+/* Scrollbar Styling */
+.tree-view::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tree-view::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+
+.tree-view::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+}
+
+.tree-view::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-500;
+}
+
+/* Firefox scrollbar */
+.tree-view {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(209 213 219) rgb(243 244 246);
+}
+
+.dark .tree-view {
+  scrollbar-color: rgb(75 85 99) rgb(31 41 55);
+}

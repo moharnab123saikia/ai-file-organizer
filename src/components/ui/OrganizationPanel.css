@@ -1,0 +1,425 @@
+/* Organization Panel Styles */
+.organization-panel {
+  @apply flex flex-col h-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm;
+  min-height: 600px;
+}
+
+.organization-panel__header {
+  @apply flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700;
+}
+
+.organization-panel__title {
+  @apply flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-100;
+  margin: 0;
+}
+
+.organization-panel__title-icon {
+  @apply w-5 h-5 text-blue-600 dark:text-blue-400;
+}
+
+.organization-panel__ai-status {
+  @apply flex items-center gap-2 px-3 py-1 rounded-full text-sm;
+}
+
+.ai-status-icon {
+  @apply w-4 h-4;
+}
+
+.ai-status-icon--online {
+  @apply text-green-500;
+  animation: pulse 2s infinite;
+}
+
+.ai-status-icon--offline {
+  @apply text-red-500;
+}
+
+.ai-status-text {
+  @apply font-medium text-gray-700 dark:text-gray-300;
+}
+
+/* File Count */
+.organization-panel__file-count {
+  @apply px-4 py-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700;
+}
+
+.file-count-message {
+  @apply text-sm text-gray-500 dark:text-gray-400 mt-1;
+}
+
+/* Error Display */
+.organization-panel__error {
+  @apply flex items-center gap-2 p-3 mx-4 mt-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg;
+}
+
+.error-icon {
+  @apply w-5 h-5 text-red-500 dark:text-red-400 flex-shrink-0;
+}
+
+.error-retry-btn {
+  @apply ml-auto px-3 py-1 text-sm font-medium text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-800 border border-red-300 dark:border-red-600 rounded hover:bg-red-200 dark:hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500;
+}
+
+/* AI Unavailable */
+.organization-panel__ai-unavailable {
+  @apply flex items-start gap-3 p-3 mx-4 mt-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg;
+}
+
+.warning-icon {
+  @apply w-5 h-5 text-yellow-500 dark:text-yellow-400 flex-shrink-0 mt-0.5;
+}
+
+.ai-config-message {
+  @apply text-sm text-yellow-600 dark:text-yellow-400 mt-1;
+}
+
+/* Type Selector */
+.organization-panel__type-selector {
+  @apply p-4 border-b border-gray-200 dark:border-gray-700;
+}
+
+.type-selector-label {
+  @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
+}
+
+.type-selector-dropdown {
+  @apply w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+}
+
+/* Structure Configuration */
+.organization-panel__structure-config {
+  @apply p-4 border-b border-gray-200 dark:border-gray-700;
+}
+
+.structure-info h4 {
+  @apply text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1;
+}
+
+.structure-summary {
+  @apply text-sm text-gray-600 dark:text-gray-400;
+}
+
+.areas-list {
+  @apply mt-4;
+}
+
+.areas-list h4 {
+  @apply text-base font-medium text-gray-900 dark:text-gray-100 mb-3;
+}
+
+.area-item {
+  @apply mb-2 p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg;
+}
+
+.area-display {
+  @apply flex items-center justify-between;
+}
+
+.area-name {
+  @apply font-medium text-gray-900 dark:text-gray-100;
+}
+
+.area-edit-form {
+  @apply space-y-2;
+}
+
+.area-name-input {
+  @apply w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.validation-error {
+  @apply text-sm text-red-600 dark:text-red-400;
+}
+
+.area-edit-actions {
+  @apply flex gap-2;
+}
+
+.add-area-btn {
+  @apply mt-3;
+}
+
+.add-area-dialog {
+  @apply mt-3 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg;
+}
+
+.add-area-dialog h4 {
+  @apply text-base font-medium text-gray-900 dark:text-gray-100 mb-3;
+}
+
+.dialog-actions {
+  @apply flex gap-2 mt-3;
+}
+
+/* Analysis Section */
+.organization-panel__analysis {
+  @apply p-4 border-b border-gray-200 dark:border-gray-700;
+}
+
+.analysis-header {
+  @apply flex items-center justify-between mb-3;
+}
+
+.analysis-header h3 {
+  @apply text-base font-medium text-gray-900 dark:text-gray-100;
+}
+
+.analysis-progress {
+  @apply flex items-center gap-2;
+}
+
+.progress-icon {
+  @apply w-4 h-4 text-blue-500;
+}
+
+.progress-icon.spinning {
+  animation: spin 1s linear infinite;
+}
+
+.analyze-btn {
+  @apply w-full mb-3;
+}
+
+.analysis-status {
+  @apply text-sm text-blue-600 dark:text-blue-400 font-medium;
+}
+
+.suggestion-count {
+  @apply text-sm text-gray-600 dark:text-gray-400 mt-2;
+}
+
+/* Suggestions */
+.organization-panel__suggestions {
+  @apply flex-1 p-4 overflow-y-auto;
+}
+
+.suggestions-header {
+  @apply flex items-center justify-between mb-4;
+}
+
+.suggestions-header h3 {
+  @apply text-base font-medium text-gray-900 dark:text-gray-100;
+}
+
+.suggestions-controls {
+  @apply flex items-center gap-3;
+}
+
+.select-all-control {
+  @apply flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer;
+}
+
+.select-all-control input {
+  @apply rounded focus:ring-2 focus:ring-blue-500;
+}
+
+.batch-actions {
+  @apply flex gap-2 mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg;
+}
+
+.suggestions-list {
+  @apply space-y-3;
+}
+
+.suggestion-item {
+  @apply flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors;
+}
+
+.suggestion-select {
+  @apply flex items-center mt-1;
+}
+
+.suggestion-select input {
+  @apply rounded focus:ring-2 focus:ring-blue-500;
+}
+
+.suggestion-details {
+  @apply flex-1 min-w-0;
+}
+
+.file-name {
+  @apply text-sm font-medium text-gray-900 dark:text-gray-100 mb-1;
+}
+
+.suggestion-path {
+  @apply text-sm text-blue-600 dark:text-blue-400 mb-1;
+}
+
+.suggestion-confidence {
+  @apply text-xs font-medium text-green-600 dark:text-green-400 mb-2;
+}
+
+.suggestion-reasoning {
+  @apply text-xs text-gray-600 dark:text-gray-400;
+}
+
+.suggestion-actions {
+  @apply flex gap-1;
+}
+
+.suggestions-empty {
+  @apply text-center py-8;
+}
+
+.suggestions-empty p {
+  @apply text-gray-600 dark:text-gray-400;
+}
+
+.empty-message {
+  @apply text-sm text-gray-500 dark:text-gray-500 mt-1;
+}
+
+/* Settings */
+.organization-panel__settings {
+  @apply p-4 border-b border-gray-200 dark:border-gray-700;
+}
+
+.organization-panel__settings h3 {
+  @apply text-base font-medium text-gray-900 dark:text-gray-100 mb-3;
+}
+
+.setting-item {
+  @apply mb-3;
+}
+
+.setting-label {
+  @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
+}
+
+.setting-slider {
+  @apply w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer;
+}
+
+.setting-slider::-webkit-slider-thumb {
+  @apply appearance-none w-4 h-4 bg-blue-500 rounded-full cursor-pointer;
+}
+
+.setting-checkbox {
+  @apply flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer;
+}
+
+.setting-checkbox input {
+  @apply rounded focus:ring-2 focus:ring-blue-500;
+}
+
+/* Action Buttons */
+.organization-panel__actions {
+  @apply flex gap-3 p-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700;
+}
+
+/* Button Styles */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-md border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn--primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white border-blue-600 focus:ring-blue-500;
+}
+
+.btn--secondary {
+  @apply bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 focus:ring-blue-500;
+}
+
+.btn--success {
+  @apply bg-green-600 hover:bg-green-700 text-white border-green-600 focus:ring-green-500;
+}
+
+.btn--danger {
+  @apply bg-red-600 hover:bg-red-700 text-white border-red-600 focus:ring-red-500;
+}
+
+.btn--outline {
+  @apply bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 focus:ring-blue-500;
+}
+
+.btn--icon {
+  @apply p-2 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 border-transparent focus:ring-blue-500;
+}
+
+.btn--sm {
+  @apply px-2 py-1 text-xs;
+}
+
+.icon {
+  @apply w-4 h-4;
+}
+
+/* Animations */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .organization-panel__header {
+    @apply flex-col items-start gap-3;
+  }
+
+  .organization-panel__ai-status {
+    @apply self-end;
+  }
+
+  .batch-actions {
+    @apply flex-col;
+  }
+
+  .organization-panel__actions {
+    @apply flex-col;
+  }
+
+  .suggestion-item {
+    @apply flex-col gap-2;
+  }
+
+  .suggestion-actions {
+    @apply self-end;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .organization-panel {
+    @apply border-black dark:border-white;
+  }
+
+  .btn--primary {
+    @apply bg-blue-800 border-blue-800;
+  }
+
+  .btn--secondary {
+    @apply border-black dark:border-white;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .progress-icon.spinning {
+    animation: none;
+  }
+
+  .ai-status-icon--online {
+    animation: none;
+  }
+
+  .btn,
+  .suggestion-item {
+    transition: none;
+  }
+}
+
+/* Focus Styles for Accessibility */
+.organization-panel *:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-gray-900;
+}
+
+/* Screen Reader Only Content */
+.sr-only {
+  @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+  clip: rect(0, 0, 0, 0);
+}
