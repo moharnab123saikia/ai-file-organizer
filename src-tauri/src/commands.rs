@@ -35,7 +35,7 @@ pub fn health_check() -> serde_json::Value {
 pub async fn test_scan_files(path: &str) -> Result<serde_json::Value, String> {
     // Simulate a delay for testing
     tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
-    
+
     Ok(serde_json::json!({
         "path": path,
         "files_found": 42,
@@ -46,11 +46,11 @@ pub async fn test_scan_files(path: &str) -> Result<serde_json::Value, String> {
 }
 
 /// Test command to simulate AI analysis
-#[tauri::command] 
+#[tauri::command]
 pub async fn test_ai_analysis(file_count: u32) -> Result<serde_json::Value, String> {
     // Simulate AI processing time
     tokio::time::sleep(tokio::time::Duration::from_millis(2000)).await;
-    
+
     Ok(serde_json::json!({
         "files_analyzed": file_count,
         "suggestions_generated": file_count / 2,

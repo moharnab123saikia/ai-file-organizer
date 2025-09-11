@@ -1,5 +1,5 @@
 use crate::error::{AppError, Result};
-use crate::johnny_decimal::{JDStructure, JDArea, JDCategory, JDItem};
+use crate::johnny_decimal::{JDArea, JDCategory, JDItem, JDStructure};
 use rusqlite::{params, Connection, Row};
 use serde::{Deserialize, Serialize};
 use std::path::Path;
@@ -67,7 +67,7 @@ impl DatabaseManager {
         let manager = Self {
             db_path: db_path.to_string(),
         };
-        
+
         manager.initialize_database()?;
         Ok(manager)
     }
@@ -163,11 +163,7 @@ impl DatabaseManager {
             preview_mode: true,
             confirm_moves: true,
             max_file_size_mb: 1000,
-            excluded_extensions: vec![
-                "tmp".to_string(),
-                "cache".to_string(),
-                "log".to_string(),
-            ],
+            excluded_extensions: vec!["tmp".to_string(), "cache".to_string(), "log".to_string()],
             excluded_paths: vec![
                 ".git".to_string(),
                 "node_modules".to_string(),
@@ -179,7 +175,11 @@ impl DatabaseManager {
 
         conn.execute(
             "INSERT OR IGNORE INTO app_settings (key, value, updated_at) VALUES (?1, ?2, ?3)",
-            params!["app_settings", settings_json, chrono::Utc::now().to_rfc3339()],
+            params![
+                "app_settings",
+                settings_json,
+                chrono::Utc::now().to_rfc3339()
+            ],
         )?;
 
         Ok(())
@@ -210,9 +210,7 @@ impl DatabaseManager {
     pub async fn load_structure(&self, structure_id: &str) -> Result<Option<JDStructure>> {
         let conn = Connection::open(&self.db_path)?;
 
-        let mut stmt = conn.prepare(
-            "SELECT data FROM jd_structures WHERE id = ?1"
-        )?;
+        let mut stmt = conn.prepare("SELECT data FROM jd_structures WHERE id = ?1")?;
 
         let result = stmt.query_row(params![structure_id], |row| {
             let data: String = row.get(0)?;
@@ -232,9 +230,8 @@ impl DatabaseManager {
     pub async fn list_structures(&self) -> Result<Vec<(String, String, String)>> {
         let conn = Connection::open(&self.db_path)?;
 
-        let mut stmt = conn.prepare(
-            "SELECT id, name, root_path FROM jd_structures ORDER BY modified_at DESC"
-        )?;
+        let mut stmt = conn
+            .prepare("SELECT id, name, root_path FROM jd_structures ORDER BY modified_at DESC")?;
 
         let structures = stmt.query_map([], |row| {
             Ok((
@@ -312,9 +309,11 @@ impl DatabaseManager {
                 extension: row.get(3)?,
                 size: row.get(4)?,
                 modified_at: chrono::DateTime::parse_from_rfc3339(&row.get::<_, String>(5)?)
-                    .unwrap().with_timezone(&chrono::Utc),
+                    .unwrap()
+                    .with_timezone(&chrono::Utc),
                 created_at: chrono::DateTime::parse_from_rfc3339(&row.get::<_, String>(6)?)
-                    .unwrap().with_timezone(&chrono::Utc),
+                    .unwrap()
+                    .with_timezone(&chrono::Utc),
                 mime_type: row.get(7)?,
                 hash: row.get(8)?,
                 jd_assignment: row.get(9)?,
@@ -363,7 +362,12 @@ impl DatabaseManager {
         Ok(())
     }
 
-    pub async fn update_session_progress(&self, session_id: &str, files_processed: u32, status: SessionStatus) -> Result<()> {
+    pub async fn update_session_progress(
+        &self,
+        session_id: &str,
+        files_processed: u32,
+        status: SessionStatus,
+    ) -> Result<()> {
         let conn = Connection::open(&self.db_path)?;
 
         let status_str = match status {
@@ -395,9 +399,7 @@ impl DatabaseManager {
     pub async fn load_settings(&self) -> Result<AppSettings> {
         let conn = Connection::open(&self.db_path)?;
 
-        let mut stmt = conn.prepare(
-            "SELECT value FROM app_settings WHERE key = 'app_settings'"
-        )?;
+        let mut stmt = conn.prepare("SELECT value FROM app_settings WHERE key = 'app_settings'")?;
 
         let result = stmt.query_row([], |row| {
             let value: String = row.get(0)?;
@@ -420,8 +422,16 @@ impl DatabaseManager {
                     preview_mode: true,
                     confirm_moves: true,
                     max_file_size_mb: 1000,
-                    excluded_extensions: vec!["tmp".to_string(), "cache".to_string(), "log".to_string()],
-                    excluded_paths: vec![".git".to_string(), "node_modules".to_string(), ".DS_Store".to_string()],
+                    excluded_extensions: vec![
+                        "tmp".to_string(),
+                        "cache".to_string(),
+                        "log".to_string(),
+                    ],
+                    excluded_paths: vec![
+                        ".git".to_string(),
+                        "node_modules".to_string(),
+                        ".DS_Store".to_string(),
+                    ],
                 })
             }
         }
@@ -434,7 +444,11 @@ impl DatabaseManager {
 
         conn.execute(
             "INSERT OR REPLACE INTO app_settings (key, value, updated_at) VALUES (?1, ?2, ?3)",
-            params!["app_settings", settings_json, chrono::Utc::now().to_rfc3339()],
+            params![
+                "app_settings",
+                settings_json,
+                chrono::Utc::now().to_rfc3339()
+            ],
         )?;
 
         Ok(())
@@ -450,7 +464,7 @@ mod tests {
     async fn test_database_manager_new() {
         let temp_dir = tempdir().unwrap();
         let db_path = temp_dir.path().join("test.db");
-        
+
         let manager = DatabaseManager::new(db_path.to_str().unwrap()).unwrap();
         assert!(Path::new(&manager.db_path).exists());
     }

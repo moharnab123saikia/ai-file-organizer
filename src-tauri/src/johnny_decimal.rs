@@ -76,7 +76,7 @@ pub struct JohnnyDecimalEngine {
 impl JohnnyDecimalEngine {
     pub fn new() -> Result<Self> {
         let mut file_type_mappings = HashMap::new();
-        
+
         // Documents area (20-29)
         file_type_mappings.insert("pdf".to_string(), (20, "Reports and Documents".to_string()));
         file_type_mappings.insert("doc".to_string(), (20, "Text Documents".to_string()));
@@ -88,7 +88,7 @@ impl JohnnyDecimalEngine {
         file_type_mappings.insert("csv".to_string(), (20, "Spreadsheets".to_string()));
         file_type_mappings.insert("ppt".to_string(), (20, "Presentations".to_string()));
         file_type_mappings.insert("pptx".to_string(), (20, "Presentations".to_string()));
-        
+
         // Media area (30-39)
         file_type_mappings.insert("jpg".to_string(), (30, "Images".to_string()));
         file_type_mappings.insert("jpeg".to_string(), (30, "Images".to_string()));
@@ -103,7 +103,7 @@ impl JohnnyDecimalEngine {
         file_type_mappings.insert("mp3".to_string(), (30, "Audio".to_string()));
         file_type_mappings.insert("wav".to_string(), (30, "Audio".to_string()));
         file_type_mappings.insert("flac".to_string(), (30, "Audio".to_string()));
-        
+
         // Development area (40-49)
         file_type_mappings.insert("js".to_string(), (40, "Source Code".to_string()));
         file_type_mappings.insert("ts".to_string(), (40, "Source Code".to_string()));
@@ -118,17 +118,15 @@ impl JohnnyDecimalEngine {
         file_type_mappings.insert("xml".to_string(), (40, "Configuration".to_string()));
         file_type_mappings.insert("yaml".to_string(), (40, "Configuration".to_string()));
         file_type_mappings.insert("yml".to_string(), (40, "Configuration".to_string()));
-        
+
         // Archives area (50-59)
         file_type_mappings.insert("zip".to_string(), (50, "Compressed Files".to_string()));
         file_type_mappings.insert("rar".to_string(), (50, "Compressed Files".to_string()));
         file_type_mappings.insert("7z".to_string(), (50, "Compressed Files".to_string()));
         file_type_mappings.insert("tar".to_string(), (50, "Compressed Files".to_string()));
         file_type_mappings.insert("gz".to_string(), (50, "Compressed Files".to_string()));
-        
-        Ok(Self {
-            file_type_mappings,
-        })
+
+        Ok(Self { file_type_mappings })
     }
 
     pub async fn create_structure(
@@ -141,30 +139,25 @@ impl JohnnyDecimalEngine {
 
         // Group files by area based on file extensions
         for file_data in files {
-            let extension = file_data["extension"]
-                .as_str()
-                .unwrap_or("")
-                .to_lowercase();
+            let extension = file_data["extension"].as_str().unwrap_or("").to_lowercase();
 
-            let (area_number, category_name) = self.file_type_mappings
+            let (area_number, category_name) = self
+                .file_type_mappings
                 .get(&extension)
                 .cloned()
                 .unwrap_or((90, "Miscellaneous".to_string())); // Default to area 90
 
             // Get or create area
-            let area = areas_map.entry(area_number).or_insert_with(|| {
-                JDArea {
-                    number: area_number,
-                    name: self.get_area_name(area_number),
-                    description: Some(self.get_area_description(area_number)),
-                    categories: Vec::new(),
-                }
+            let area = areas_map.entry(area_number).or_insert_with(|| JDArea {
+                number: area_number,
+                name: self.get_area_name(area_number),
+                description: Some(self.get_area_description(area_number)),
+                categories: Vec::new(),
             });
 
             // Find or create category
             let category_number = area_number + 1; // First category in area
-            if let Some(category) = area.categories.iter_mut()
-                .find(|c| c.name == category_name) {
+            if let Some(category) = area.categories.iter_mut().find(|c| c.name == category_name) {
                 // Add file to existing category
                 if let Some(item) = category.items.first_mut() {
                     if let Some(path) = file_data["path"].as_str() {
@@ -184,7 +177,10 @@ impl JohnnyDecimalEngine {
                 let item = JDItem {
                     number: format!("{}.01", category_number),
                     name: format!("{} Files", category_name),
-                    description: Some(format!("Collection of {} files", category_name.to_lowercase())),
+                    description: Some(format!(
+                        "Collection of {} files",
+                        category_name.to_lowercase()
+                    )),
                     files: if let Some(path) = file_data["path"].as_str() {
                         vec![path.to_string()]
                     } else {
@@ -206,7 +202,7 @@ impl JohnnyDecimalEngine {
             area.categories.sort_by_key(|c| c.number);
             for (i, category) in area.categories.iter_mut().enumerate() {
                 category.number = area.number + (i as u8) + 1;
-                
+
                 for (j, item) in category.items.iter_mut().enumerate() {
                     item.number = format!("{}.{:02}", category.number, j + 1);
                 }
@@ -235,7 +231,10 @@ impl JohnnyDecimalEngine {
             if area.number % 10 != 0 || area.number < 10 || area.number > 90 {
                 errors.push(JDValidationError {
                     error_type: "invalid_area_number".to_string(),
-                    message: format!("Area number {} is invalid. Must be 10, 20, 30, ..., 90", area.number),
+                    message: format!(
+                        "Area number {} is invalid. Must be 10, 20, 30, ..., 90",
+                        area.number
+                    ),
                     area_number: Some(area.number),
                     category_number: None,
                 });
@@ -260,7 +259,10 @@ impl JohnnyDecimalEngine {
                         error_type: "invalid_category_number".to_string(),
                         message: format!(
                             "Category number {} is outside valid range for area {} ({}-{})",
-                            category.number, area.number, area.number, area.number + 9
+                            category.number,
+                            area.number,
+                            area.number,
+                            area.number + 9
                         ),
                         area_number: Some(area.number),
                         category_number: Some(category.number),
@@ -271,7 +273,10 @@ impl JohnnyDecimalEngine {
                 if used_category_numbers.contains(&category.number) {
                     errors.push(JDValidationError {
                         error_type: "duplicate_category_number".to_string(),
-                        message: format!("Category number {} is used multiple times", category.number),
+                        message: format!(
+                            "Category number {} is used multiple times",
+                            category.number
+                        ),
                         area_number: Some(area.number),
                         category_number: Some(category.number),
                     });
@@ -311,7 +316,9 @@ impl JohnnyDecimalEngine {
                 warnings.push(JDValidationWarning {
                     warning_type: "empty_area".to_string(),
                     message: format!("Area {} has no categories", area.number),
-                    suggestion: Some("Consider removing empty areas or adding categories".to_string()),
+                    suggestion: Some(
+                        "Consider removing empty areas or adding categories".to_string(),
+                    ),
                 });
             }
         }
@@ -328,19 +335,18 @@ impl JohnnyDecimalEngine {
         file_info: serde_json::Value,
         structure: &JDStructure,
     ) -> Result<CategoryAssignment> {
-        let extension = file_info["extension"]
-            .as_str()
-            .unwrap_or("")
-            .to_lowercase();
+        let extension = file_info["extension"].as_str().unwrap_or("").to_lowercase();
 
         // Try to find appropriate area and category
         if let Some((area_number, category_name)) = self.file_type_mappings.get(&extension) {
             // Find the area in the structure
             if let Some(area) = structure.areas.iter().find(|a| a.number == *area_number) {
                 // Find matching category
-                if let Some(category) = area.categories.iter()
-                    .find(|c| c.name.to_lowercase().contains(&category_name.to_lowercase())) {
-                    
+                if let Some(category) = area.categories.iter().find(|c| {
+                    c.name
+                        .to_lowercase()
+                        .contains(&category_name.to_lowercase())
+                }) {
                     // Find appropriate item or suggest new one
                     let item_number = if let Some(item) = category.items.first() {
                         item.number.clone()
@@ -414,13 +420,16 @@ mod tests {
     fn test_johnny_decimal_engine_new() {
         let engine = JohnnyDecimalEngine::new().unwrap();
         assert!(!engine.file_type_mappings.is_empty());
-        assert_eq!(engine.file_type_mappings.get("pdf"), Some(&(20, "Reports and Documents".to_string())));
+        assert_eq!(
+            engine.file_type_mappings.get("pdf"),
+            Some(&(20, "Reports and Documents".to_string()))
+        );
     }
 
     #[tokio::test]
     async fn test_create_structure() {
         let engine = JohnnyDecimalEngine::new().unwrap();
-        
+
         let files = vec![
             serde_json::json!({
                 "path": "/test/document.pdf",
@@ -429,11 +438,11 @@ mod tests {
             serde_json::json!({
                 "path": "/test/image.jpg",
                 "extension": "jpg"
-            })
+            }),
         ];
 
         let structure = engine.create_structure(files, "/test").await.unwrap();
-        
+
         assert!(!structure.areas.is_empty());
         assert!(structure.areas.iter().any(|a| a.number == 20)); // Documents
         assert!(structure.areas.iter().any(|a| a.number == 30)); // Media
@@ -442,26 +451,22 @@ mod tests {
     #[tokio::test]
     async fn test_validate_structure() {
         let engine = JohnnyDecimalEngine::new().unwrap();
-        
+
         let structure = JDStructure {
             id: "test".to_string(),
             name: "Test Structure".to_string(),
             root_path: "/test".to_string(),
-            areas: vec![
-                JDArea {
-                    number: 20,
-                    name: "Documents".to_string(),
+            areas: vec![JDArea {
+                number: 20,
+                name: "Documents".to_string(),
+                description: None,
+                categories: vec![JDCategory {
+                    number: 21,
+                    name: "PDFs".to_string(),
                     description: None,
-                    categories: vec![
-                        JDCategory {
-                            number: 21,
-                            name: "PDFs".to_string(),
-                            description: None,
-                            items: vec![],
-                        }
-                    ],
-                }
-            ],
+                    items: vec![],
+                }],
+            }],
             created_at: chrono::Utc::now(),
             modified_at: chrono::Utc::now(),
         };

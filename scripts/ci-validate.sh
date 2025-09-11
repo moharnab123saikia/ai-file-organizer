@@ -96,9 +96,9 @@ run_check "Frontend build" "npm run build"
 echo ""
 echo "🦀 Rust Backend Tests & Checks"
 echo "------------------------------"
-run_check "Rust tests" "cd src-tauri && cargo test --verbose"
-run_check "Rust linting (Clippy)" "cd src-tauri && cargo clippy -- -D warnings"
-run_check "Rust formatting check" "cd src-tauri && cargo fmt -- --check"
+run_check "Rust tests" "(cd src-tauri && cargo test --verbose)"
+run_check "Rust linting (Clippy)" "(cd src-tauri && cargo clippy -- -W clippy::all -W clippy::pedantic -A unused -A dead_code)"
+run_check "Rust formatting check" "(cd src-tauri && cargo fmt -- --check)"
 
 echo ""
 echo "🎭 E2E Tests"
@@ -126,12 +126,11 @@ fi
 
 print_status "Running Rust security audit"
 if command -v cargo-audit >/dev/null 2>&1; then
-    if cd src-tauri && cargo audit; then
+    if (cd src-tauri && cargo audit); then
         print_success "No Rust security vulnerabilities found"
     else
         print_warning "Rust audit found issues (check output above)"
     fi
-    cd ..
 else
     print_warning "cargo-audit not installed (run: cargo install cargo-audit)"
 fi

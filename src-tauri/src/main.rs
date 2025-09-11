@@ -1,21 +1,21 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod ai_service;
 mod commands;
+mod database;
 mod error;
 mod file_operations;
-mod ai_service;
 mod johnny_decimal;
-mod database;
 
-use error::Result;
 use commands::*;
+use error::Result;
 
 #[tokio::main]
 async fn main() -> Result<()> {
     // Initialize logging
     env_logger::init();
-    
+
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             greet,
@@ -26,6 +26,6 @@ async fn main() -> Result<()> {
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
-    
+
     Ok(())
 }
