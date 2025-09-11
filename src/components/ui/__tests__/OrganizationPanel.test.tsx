@@ -221,7 +221,7 @@ describe('OrganizationPanel Component', () => {
     it('shows analyzing state', () => {
       render(<OrganizationPanel {...defaultProps} isAnalyzing={true} />);
       
-      expect(screen.getByRole('status')).toHaveTextContent('Analyzing files...');
+      expect(screen.getByRole('status')).toHaveTextContent('Analyzing files with AI...');
       expect(screen.getByRole('button', { name: /analyze files/i })).toBeDisabled();
     });
 
@@ -518,7 +518,7 @@ describe('OrganizationPanel Component', () => {
     it('announces status changes to screen readers', () => {
       render(<OrganizationPanel {...defaultProps} isAnalyzing={true} />);
       
-      expect(screen.getByRole('status')).toHaveTextContent('Analyzing files...');
+      expect(screen.getByRole('status')).toHaveTextContent('Analyzing files with AI...');
     });
   });
 });

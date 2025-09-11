@@ -89,6 +89,8 @@ describe('TreeView Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // Clean up any existing DOM elements to avoid conflicts between tests
+    document.body.innerHTML = '';
   });
 
   describe('Rendering', () => {
@@ -103,12 +105,8 @@ describe('TreeView Component', () => {
     it('renders with custom height', () => {
       render(<TreeView {...defaultProps} height={600} />);
       
-      const treeContainers = screen.getAllByTestId('tree-view-container');
-      const currentContainer = treeContainers.find(container =>
-        container.style.height === '600px'
-      );
-      expect(currentContainer).toBeDefined();
-      expect(currentContainer).toHaveStyle({ height: '600px' });
+      const treeView = screen.getByTestId('tree-view');
+      expect(treeView).toHaveStyle({ height: '600px' });
     });
 
     it('renders empty state when no data provided', () => {
@@ -286,7 +284,7 @@ describe('TreeView Component', () => {
       const user = userEvent.setup();
       render(<TreeView {...defaultProps} />);
       
-      const treeView = screen.getAllByTestId('tree-view-container')[0];
+      const treeView = screen.getByTestId('tree-view');
       treeView.focus();
       
       await user.keyboard('{ArrowDown}');
