@@ -414,6 +414,54 @@ export interface SessionProgress {
 // ================================
 
 export interface AppSettings {
+  theme: ThemeSettings;
+  scan: ScanSettings;
+  ai: AISettings;
+  organization: UserOrganizationSettings;
+  general: GeneralSettings;
+}
+
+export interface ThemeSettings {
+  mode: 'light' | 'dark' | 'system' | 'high_contrast';
+  primaryColor: string;
+  fontSize: 'small' | 'medium' | 'large' | 'extra-large';
+  compactMode: boolean;
+}
+
+export interface ScanSettings {
+  maxDepth: number;
+  includeHidden: boolean;
+  excludePatterns: string[];
+  maxFileSize: number; // in bytes
+  followSymlinks: boolean;
+}
+
+export interface AISettings {
+  provider: 'ollama' | 'openai' | 'anthropic' | 'local';
+  model: string;
+  maxTokens: number;
+  temperature: number;
+  endpoint: string;
+  enabled: boolean;
+}
+
+export interface UserOrganizationSettings {
+  autoOrganize: boolean;
+  confirmBeforeMove: boolean;
+  createBackups: boolean;
+  preserveOriginalStructure: boolean;
+}
+
+export interface GeneralSettings {
+  language: string;
+  autoSave: boolean;
+  confirmOnExit: boolean;
+  showTips: boolean;
+  checkForUpdates: boolean;
+}
+
+// Legacy interface for backward compatibility
+export interface LegacyAppSettings {
   theme: ThemeMode;
   language: string;
   autoSave: boolean;
@@ -710,6 +758,42 @@ export interface OrganizationSuggestion {
   };
   confidence: number;
   reasoning: string;
+}
+
+// ================================
+// Settings Service Types
+// ================================
+
+export interface SettingsChangeEvent {
+  type: 'theme' | 'scan' | 'ai' | 'organization' | 'general' | 'reset';
+  settings: ThemeSettings | ScanSettings | AISettings | UserOrganizationSettings | GeneralSettings | AppSettings;
+  timestamp: Date;
+}
+
+export interface SettingsExport {
+  settings: AppSettings;
+  exportedAt: string;
+  version: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface SettingsValidationResult {
+  isValid: boolean;
+  errors: SettingsValidationError[];
+  warnings: SettingsValidationWarning[];
+}
+
+export interface SettingsValidationError {
+  field: string;
+  message: string;
+  value: unknown;
+  expectedType?: string;
+}
+
+export interface SettingsValidationWarning {
+  field: string;
+  message: string;
+  suggestion?: string;
 }
 
 // ================================

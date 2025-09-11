@@ -32,6 +32,7 @@ pub struct ModelInfo {
     pub digest: Option<String>,
 }
 
+#[allow(dead_code)]
 pub struct OllamaService {
     client: Client,
     base_url: String,
@@ -39,6 +40,7 @@ pub struct OllamaService {
     is_running: bool,
 }
 
+#[allow(dead_code)]
 impl OllamaService {
     pub async fn new() -> Result<Self> {
         let client = Client::new();

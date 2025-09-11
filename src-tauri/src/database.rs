@@ -4,6 +4,7 @@ use rusqlite::{params, Connection};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub struct DatabaseManager {
     db_path: String,
 }
@@ -61,6 +62,7 @@ pub struct AppSettings {
     pub excluded_paths: Vec<String>,
 }
 
+#[allow(dead_code)]
 impl DatabaseManager {
     pub fn new(db_path: &str) -> Result<Self> {
         let manager = Self {
