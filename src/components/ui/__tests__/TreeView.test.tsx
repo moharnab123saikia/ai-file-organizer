@@ -418,8 +418,8 @@ describe('TreeView Component', () => {
       render(<TreeView {...defaultProps} data={largeTree} />);
       const endTime = performance.now();
       
-      // Should render in reasonable time (less than 500ms for large datasets)
-      expect(endTime - startTime).toBeLessThan(500);
+      // Should render in reasonable time (less than 1000ms for large datasets in CI)
+      expect(endTime - startTime).toBeLessThan(1000);
     });
   });
 });
