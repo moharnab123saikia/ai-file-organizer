@@ -4,9 +4,16 @@ node_modules/
 .pnp.js
 
 # Production builds
-/build
 /dist
-*.tsbuildinfo
+/build
+dist-ssr
+*.local
+
+# Testing
+/coverage
+/test-results
+/playwright-report
+/playwright/.cache
 
 # Environment variables
 .env
@@ -16,8 +23,7 @@ node_modules/
 .env.production.local
 
 # IDE files
-.vscode/settings.json
-.vscode/launch.json
+.vscode/
 .idea/
 *.swp
 *.swo
@@ -33,34 +39,44 @@ ehthumbs.db
 Thumbs.db
 
 # Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 lerna-debug.log*
 
-# Coverage reports
-coverage/
-*.lcov
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# Test output
-test-results/
+# Dependency directories
+node_modules/
+jspm_packages/
 
-# Tauri specifics
-src-tauri/target/
-src-tauri/Cargo.lock
+# Snowpack dependency directory
+web_modules/
 
-# Rust
-**/*.rs.bk
-
-# Temporary files
-*.tmp
-*.temp
-
-# User-specific files
-.eslintcache
+# TypeScript cache
+*.tsbuildinfo
 
 # Optional npm cache directory
 .npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
 
 # Optional REPL history
 .node_repl_history
@@ -71,15 +87,96 @@ src-tauri/Cargo.lock
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env.test
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
 
-# Stores VSCode versions used for testing VSCode extensions
-.vscode-test
+# Next.js build output
+.next
+out
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Gatsby files
+.cache/
+public
+
+# Storybook build outputs
+.out
+.storybook-out
+storybook-static
+
+# Temporary folders
+tmp/
+temp/
+
+# Rust/Cargo
+/src-tauri/target
+/target
+
+# Tauri
+/src-tauri/target/
+/src-tauri/Cargo.lock
+
+# CI/CD artifacts
+/artifacts
+/.github/workflows/*.log
+
+# Security
+*.pem
+*.key
+*.crt
+*.p12
+
+# Generated files
+*.generated.*
+/generated/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
 
 # Backup files
 *.backup
 *.bak
+*.tmp
 
-# Memory bank - keep tracked for project continuity
-!memory-bank/
+# MacOS
+.AppleDouble
+.LSOverride
+Icon
+
+# Windows
+desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
