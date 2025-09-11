@@ -375,7 +375,7 @@ export const TreeView: React.FC<TreeViewProps> = ({
         style={{ height, overflow: 'auto' }}
         role="tree"
         tabIndex={0}
-        data-testid="tree-view-container"
+        data-testid="tree-view"
         onKeyDown={handleKeyDown}
       >
         <TreeNodeContainer

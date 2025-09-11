@@ -360,9 +360,9 @@ describe('TreeView Component', () => {
     });
 
     it('provides proper expanded/collapsed state information', () => {
-      render(<TreeView {...defaultProps} expandedItems={['root']} />);
+      const { container } = render(<TreeView {...defaultProps} expandedItems={['root']} />);
       
-      const expandedNode = screen.getAllByTestId('tree-node-root')[0];
+      const expandedNode = container.querySelector('[data-testid="tree-node-root"]');
       expect(expandedNode).toHaveAttribute('aria-expanded', 'true');
     });
   });

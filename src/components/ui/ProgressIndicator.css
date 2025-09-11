@@ -1,0 +1,285 @@
+/* ProgressIndicator Component Styles */
+.progress-indicator {
+  --progress-height: 8px;
+  --progress-border-radius: 4px;
+  --progress-bg: #e5e7eb;
+  --progress-fill: #3b82f6;
+  --progress-success: #10b981;
+  --progress-error: #ef4444;
+  --progress-warning: #f59e0b;
+  --progress-text: #374151;
+  --progress-text-secondary: #6b7280;
+  --progress-cancel-hover: #f3f4f6;
+  
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: system-ui, -apple-system, sans-serif;
+  color: var(--progress-text);
+}
+
+/* Header with label and cancel */
+.progress-indicator__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.progress-indicator__label-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.progress-indicator__label {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  truncate: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.progress-indicator__percentage {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--progress-text-secondary);
+  flex-shrink: 0;
+}
+
+/* Cancel button */
+.progress-indicator__cancel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: white;
+  color: var(--progress-text);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.progress-indicator__cancel:hover:not(:disabled) {
+  background: var(--progress-cancel-hover);
+  border-color: #9ca3af;
+}
+
+.progress-indicator__cancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.progress-indicator__cancel-text {
+  display: none;
+}
+
+/* Progress track and bar */
+.progress-indicator__track {
+  position: relative;
+  width: 100%;
+  height: var(--progress-height);
+  background: var(--progress-bg);
+  border-radius: var(--progress-border-radius);
+  overflow: hidden;
+}
+
+.progress-indicator__bar {
+  height: 100%;
+  background: var(--progress-fill);
+  border-radius: var(--progress-border-radius);
+  transition: width 0.3s ease;
+}
+
+/* Indeterminate animation */
+.progress-indicator__bar--animated {
+  width: 30% !important;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--progress-fill),
+    transparent
+  );
+  animation: progress-indeterminate 2s infinite;
+}
+
+@keyframes progress-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
+}
+
+/* Status variants */
+.progress-indicator--success .progress-indicator__bar {
+  background: var(--progress-success);
+}
+
+.progress-indicator--error .progress-indicator__bar {
+  background: var(--progress-error);
+}
+
+.progress-indicator--warning .progress-indicator__bar {
+  background: var(--progress-warning);
+}
+
+.progress-indicator--success .progress-indicator__bar--animated {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--progress-success),
+    transparent
+  );
+}
+
+.progress-indicator--error .progress-indicator__bar--animated {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--progress-error),
+    transparent
+  );
+}
+
+.progress-indicator--warning .progress-indicator__bar--animated {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--progress-warning),
+    transparent
+  );
+}
+
+/* Size variants */
+.progress-indicator--small {
+  --progress-height: 4px;
+  --progress-border-radius: 2px;
+  gap: 6px;
+}
+
+.progress-indicator--small .progress-indicator__label {
+  font-size: 12px;
+}
+
+.progress-indicator--small .progress-indicator__percentage {
+  font-size: 11px;
+}
+
+.progress-indicator--small .progress-indicator__cancel {
+  padding: 2px 6px;
+  font-size: 11px;
+}
+
+.progress-indicator--large {
+  --progress-height: 12px;
+  --progress-border-radius: 6px;
+  gap: 12px;
+}
+
+.progress-indicator--large .progress-indicator__label {
+  font-size: 16px;
+}
+
+.progress-indicator--large .progress-indicator__percentage {
+  font-size: 14px;
+}
+
+.progress-indicator--large .progress-indicator__cancel {
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
+.progress-indicator--large .progress-indicator__cancel-text {
+  display: inline;
+}
+
+/* Detailed progress info */
+.progress-indicator__details {
+  font-size: 12px;
+  color: var(--progress-text-secondary);
+  line-height: 1.4;
+}
+
+/* Screen reader only content */
+.progress-indicator__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus styles */
+.progress-indicator__cancel:focus {
+  outline: 2px solid var(--progress-fill);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .progress-indicator__bar {
+    transition: none;
+  }
+  
+  .progress-indicator__bar--animated {
+    animation: none;
+    background: var(--progress-fill);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .progress-indicator {
+    --progress-bg: #374151;
+    --progress-fill: #60a5fa;
+    --progress-success: #34d399;
+    --progress-error: #f87171;
+    --progress-warning: #fbbf24;
+    --progress-text: #f9fafb;
+    --progress-text-secondary: #d1d5db;
+    --progress-cancel-hover: #4b5563;
+  }
+  
+  .progress-indicator__cancel {
+    background: #1f2937;
+    border-color: #4b5563;
+    color: var(--progress-text);
+  }
+  
+  .progress-indicator__cancel:hover:not(:disabled) {
+    background: var(--progress-cancel-hover);
+    border-color: #6b7280;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .progress-indicator {
+    --progress-bg: #000000;
+    --progress-fill: #0000ff;
+    --progress-success: #008000;
+    --progress-error: #ff0000;
+    --progress-warning: #ff8000;
+    --progress-text: #000000;
+  }
+  
+  .progress-indicator__track {
+    border: 1px solid #000000;
+  }
+  
+  .progress-indicator__cancel {
+    border: 2px solid #000000;
+  }
+}

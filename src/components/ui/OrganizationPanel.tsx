@@ -313,17 +313,18 @@ export const OrganizationPanel: React.FC<OrganizationPanelProps> = ({
         </div>
 
         <button
+          type="button"
           onClick={handleAnalyze}
           disabled={isAnalyzing || fileCount === 0 || !aiAvailable}
           className="btn btn--primary analyze-btn"
           aria-label="Analyze Files"
         >
-          {isAnalyzing ? 'Analyzing files...' : 'Analyze Files'}
+          {isAnalyzing ? 'Analyzing files with AI...' : 'Analyze Files'}
         </button>
 
         {isAnalyzing && (
           <div className="analysis-status" role="status" aria-live="polite">
-            Analyzing files...
+            Analyzing files with AI...
           </div>
         )}
 

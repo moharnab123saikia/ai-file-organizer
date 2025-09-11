@@ -9,12 +9,7 @@ mod johnny_decimal;
 mod database;
 
 use error::Result;
-
-// Simple test command to verify Tauri is working
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
+use commands::*;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -23,7 +18,11 @@ async fn main() -> Result<()> {
     
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
-            greet
+            greet,
+            get_app_info,
+            health_check,
+            test_scan_files,
+            test_ai_analysis
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
