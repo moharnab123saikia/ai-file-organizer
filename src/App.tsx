@@ -345,13 +345,13 @@ function App() {
   const allFiles = extractFiles(sampleFileTree);
 
   return (
-    <div className="min-h-screen bg-gray-50" data-testid="app-container">
+    <div className="min-h-screen bg-gray-50 text-gray-900" data-testid="app-container">
       <div className="container mx-auto p-4 max-w-7xl">
         <header className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
             AI File Organizer
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
             Organize your files intelligently using AI and the Johnny Decimal system
           </p>
         </header>
@@ -400,8 +400,8 @@ function App() {
             {/* File Explorer Pane */}
             <div className="bg-white rounded-lg shadow-sm border" data-testid="file-explorer">
               <div className="p-6 border-b">
-                <h2 className="text-xl font-semibold">File Explorer</h2>
-                <p className="text-gray-600 text-sm mt-1">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">File Explorer</h2>
+                <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
                   Browse and select files to organize
                 </p>
               </div>
@@ -426,8 +426,8 @@ function App() {
             {/* Organization Pane */}
             <div className="bg-white rounded-lg shadow-sm border" data-testid="organization-panel">
               <div className="p-6 border-b">
-                <h2 className="text-xl font-semibold">Organization Panel</h2>
-                <p className="text-gray-600 text-sm mt-1">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Organization Panel</h2>
+                <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
                   AI-powered file organization with Johnny Decimal system
                 </p>
               </div>

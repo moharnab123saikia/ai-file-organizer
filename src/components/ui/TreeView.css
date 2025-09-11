@@ -26,6 +26,11 @@
 .tree-node {
   @apply relative flex items-center py-1 px-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150;
   user-select: none;
+  color: #374151; /* Ensure visible text color (gray-700) */
+}
+
+.dark .tree-node {
+  color: #d1d5db; /* Light text for dark mode (gray-300) */
 }
 
 .tree-node:focus {
@@ -93,10 +98,16 @@
 /* Node Name */
 .tree-node__name {
   @apply flex-1 truncate font-medium;
+  color: inherit; /* Inherit from parent node */
 }
 
 .tree-node--file .tree-node__name {
   @apply font-normal;
+  color: #4b5563; /* Slightly lighter for files (gray-600) */
+}
+
+.dark .tree-node--file .tree-node__name {
+  color: #9ca3af; /* Light gray for dark mode (gray-400) */
 }
 
 /* File Size */
