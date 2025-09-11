@@ -1,7 +1,6 @@
 use crate::error::{AppError, Result};
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 use std::process::{Command, Stdio};
 use tokio::time::{timeout, Duration};
 
@@ -159,13 +158,13 @@ impl OllamaService {
         let response = timeout(
             Duration::from_secs(30),
             self.client
-                .post(&format!("{}/api/generate", self.base_url))
+                .post(format!("{}/api/generate", self.base_url))
                 .json(&payload)
                 .send(),
         )
         .await
         .map_err(|_| AppError::AiService("Request timeout".to_string()))?
-        .map_err(|e| AppError::Http(e))?;
+        .map_err(AppError::Http)?;
 
         if !response.status().is_success() {
             return Err(AppError::AiService(format!(
@@ -175,7 +174,7 @@ impl OllamaService {
         }
 
         let response_data: serde_json::Value =
-            response.json().await.map_err(|e| AppError::Http(e))?;
+            response.json().await.map_err(AppError::Http)?;
 
         let ai_response = response_data["response"]
             .as_str()
@@ -309,16 +308,16 @@ Be concise and practical in your categorization."#,
 
         let response = self
             .client
-            .get(&format!("{}/api/tags", self.base_url))
+            .get(format!("{}/api/tags", self.base_url))
             .send()
             .await
-            .map_err(|e| AppError::Http(e))?;
+            .map_err(AppError::Http)?;
 
         if !response.status().is_success() {
             return Err(AppError::AiService("Failed to fetch models".to_string()));
         }
 
-        let data: serde_json::Value = response.json().await.map_err(|e| AppError::Http(e))?;
+        let data: serde_json::Value = response.json().await.map_err(AppError::Http)?;
 
         let models = data["models"]
             .as_array()
@@ -336,7 +335,7 @@ Be concise and practical in your categorization."#,
     async fn is_service_available(&self) -> bool {
         match self
             .client
-            .get(&format!("{}/api/tags", self.base_url))
+            .get(format!("{}/api/tags", self.base_url))
             .timeout(Duration::from_secs(5))
             .send()
             .await

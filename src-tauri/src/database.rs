@@ -1,8 +1,7 @@
-use crate::error::{AppError, Result};
-use crate::johnny_decimal::{JDArea, JDCategory, JDItem, JDStructure};
-use rusqlite::{params, Connection, Row};
+use crate::error::Result;
+use crate::johnny_decimal::JDStructure;
+use rusqlite::{params, Connection};
 use serde::{Deserialize, Serialize};
-use std::path::Path;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DatabaseManager {
@@ -458,6 +457,7 @@ impl DatabaseManager {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::path::Path;
     use tempfile::tempdir;
 
     #[tokio::test]

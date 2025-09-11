@@ -1,10 +1,9 @@
-use tauri::AppHandle;
 
 /// A simple greeting command for testing Tauri backend communication
 #[tauri::command]
 pub fn greet(name: &str) -> String {
     if name == "Playwright Test" {
-        format!("Hello Playwright Test!")
+        "Hello Playwright Test!".to_string()
     } else {
         format!("Hello, {}! You've been greeted from Rust!", name)
     }

@@ -2,8 +2,7 @@ use crate::error::{AppError, Result};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
-use std::collections::HashMap;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use tokio::fs;
 use walkdir::WalkDir;
 
@@ -117,7 +116,7 @@ impl FileScanner {
 
     pub async fn get_file_metadata(&self, path: &str) -> Result<FileMetadata> {
         let path_buf = PathBuf::from(path);
-        let metadata = fs::metadata(&path_buf).await.map_err(|e| AppError::Io(e))?;
+        let metadata = fs::metadata(&path_buf).await.map_err(AppError::Io)?;
 
         let name = path_buf
             .file_name()
@@ -144,12 +143,12 @@ impl FileScanner {
         // Get timestamps
         let created = metadata
             .created()
-            .map(|t| DateTime::from(t))
+            .map(DateTime::from)
             .unwrap_or_else(|_| Utc::now());
 
         let modified = metadata
             .modified()
-            .map(|t| DateTime::from(t))
+            .map(DateTime::from)
             .unwrap_or_else(|_| Utc::now());
 
         Ok(FileMetadata {
@@ -166,7 +165,7 @@ impl FileScanner {
     }
 
     pub async fn compute_checksum(&self, path: &str) -> Result<String> {
-        let content = fs::read(path).await.map_err(|e| AppError::Io(e))?;
+        let content = fs::read(path).await.map_err(AppError::Io)?;
 
         let mut hasher = Sha256::new();
         hasher.update(&content);
@@ -200,13 +199,13 @@ impl FileOperations {
             if let Some(parent) = dest_path.parent() {
                 fs::create_dir_all(parent)
                     .await
-                    .map_err(|e| AppError::Io(e))?;
+                    .map_err(AppError::Io)?;
             }
         }
 
         fs::rename(&source_path, &dest_path)
             .await
-            .map_err(|e| AppError::Io(e))?;
+            .map_err(AppError::Io)?;
 
         Ok(())
     }
@@ -228,13 +227,13 @@ impl FileOperations {
             if let Some(parent) = dest_path.parent() {
                 fs::create_dir_all(parent)
                     .await
-                    .map_err(|e| AppError::Io(e))?;
+                    .map_err(AppError::Io)?;
             }
         }
 
         fs::copy(&source_path, &dest_path)
             .await
-            .map_err(|e| AppError::Io(e))?;
+            .map_err(AppError::Io)?;
 
         Ok(())
     }
@@ -242,7 +241,7 @@ impl FileOperations {
     pub async fn create_directory(&self, path: &str) -> Result<()> {
         fs::create_dir_all(path)
             .await
-            .map_err(|e| AppError::Io(e))?;
+            .map_err(AppError::Io)?;
         Ok(())
     }
 
@@ -250,7 +249,7 @@ impl FileOperations {
         let path_buf = PathBuf::from(path);
 
         if path_buf.is_file() {
-            fs::remove_file(path).await.map_err(|e| AppError::Io(e))?;
+            fs::remove_file(path).await.map_err(AppError::Io)?;
         } else {
             return Err(AppError::InvalidInput("Path is not a file".to_string()));
         }
@@ -270,9 +269,9 @@ impl FileOperations {
         if recursive {
             fs::remove_dir_all(path)
                 .await
-                .map_err(|e| AppError::Io(e))?;
+                .map_err(AppError::Io)?;
         } else {
-            fs::remove_dir(path).await.map_err(|e| AppError::Io(e))?;
+            fs::remove_dir(path).await.map_err(AppError::Io)?;
         }
 
         Ok(())
