@@ -68,11 +68,13 @@ pub struct JDValidationWarning {
     pub suggestion: Option<String>,
 }
 
+#[allow(dead_code)]
 pub struct JohnnyDecimalEngine {
     // File type mappings for automatic categorization
     file_type_mappings: HashMap<String, (u8, String)>, // extension -> (area, category_name)
 }
 
+#[allow(dead_code)]
 impl JohnnyDecimalEngine {
     pub fn new() -> Result<Self> {
         let mut file_type_mappings = HashMap::new();

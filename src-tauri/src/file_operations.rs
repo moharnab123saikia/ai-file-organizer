@@ -36,10 +36,12 @@ pub struct ScanResult {
     pub scan_duration: u64,
 }
 
+#[allow(dead_code)]
 pub struct FileScanner {
     max_depth: Option<usize>,
 }
 
+#[allow(dead_code)]
 impl FileScanner {
     pub fn new() -> Result<Self> {
         Ok(Self {
@@ -175,8 +177,10 @@ impl FileScanner {
     }
 }
 
+#[allow(dead_code)]
 pub struct FileOperations {}
 
+#[allow(dead_code)]
 impl FileOperations {
     pub fn new() -> Result<Self> {
         Ok(Self {})

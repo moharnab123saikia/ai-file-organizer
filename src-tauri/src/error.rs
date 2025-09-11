@@ -85,6 +85,7 @@ pub fn log_error(error: &AppError, context: &str) {
 }
 
 // Result helper for operations that might fail
+#[allow(dead_code)]
 pub fn handle_result<T>(result: Result<T>, context: &str) -> Result<T> {
     match result {
         Ok(value) => Ok(value),
