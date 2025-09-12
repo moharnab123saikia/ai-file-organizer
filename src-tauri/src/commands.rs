@@ -1,4 +1,3 @@
-
 /// A simple greeting command for testing Tauri backend communication
 #[tauri::command]
 pub fn greet(name: &str) -> String {

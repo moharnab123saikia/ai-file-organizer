@@ -175,8 +175,7 @@ impl OllamaService {
             )));
         }
 
-        let response_data: serde_json::Value =
-            response.json().await.map_err(AppError::Http)?;
+        let response_data: serde_json::Value = response.json().await.map_err(AppError::Http)?;
 
         let ai_response = response_data["response"]
             .as_str()

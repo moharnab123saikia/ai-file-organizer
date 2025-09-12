@@ -201,9 +201,7 @@ impl FileOperations {
 
         if create_destination_dir {
             if let Some(parent) = dest_path.parent() {
-                fs::create_dir_all(parent)
-                    .await
-                    .map_err(AppError::Io)?;
+                fs::create_dir_all(parent).await.map_err(AppError::Io)?;
             }
         }
 
@@ -229,9 +227,7 @@ impl FileOperations {
 
         if create_destination_dir {
             if let Some(parent) = dest_path.parent() {
-                fs::create_dir_all(parent)
-                    .await
-                    .map_err(AppError::Io)?;
+                fs::create_dir_all(parent).await.map_err(AppError::Io)?;
             }
         }
 
@@ -243,9 +239,7 @@ impl FileOperations {
     }
 
     pub async fn create_directory(&self, path: &str) -> Result<()> {
-        fs::create_dir_all(path)
-            .await
-            .map_err(AppError::Io)?;
+        fs::create_dir_all(path).await.map_err(AppError::Io)?;
         Ok(())
     }
 
@@ -271,9 +265,7 @@ impl FileOperations {
         }
 
         if recursive {
-            fs::remove_dir_all(path)
-                .await
-                .map_err(AppError::Io)?;
+            fs::remove_dir_all(path).await.map_err(AppError::Io)?;
         } else {
             fs::remove_dir(path).await.map_err(AppError::Io)?;
         }

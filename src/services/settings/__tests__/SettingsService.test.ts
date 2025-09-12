@@ -186,7 +186,7 @@ describe('SettingsService', () => {
       } as any;
 
       await expect(settingsService.updateThemeSettings(invalidTheme)).rejects.toThrow(
-        'Invalid theme settings'
+        'Invalid theme mode'
       );
     });
   });
@@ -251,9 +251,10 @@ describe('SettingsService', () => {
       const exported = await settingsService.exportSettings();
       const parsed = JSON.parse(exported);
 
-      expect(parsed).toEqual(defaultSettings);
+      expect(parsed.settings).toEqual(defaultSettings);
       expect(parsed.exportedAt).toBeDefined();
       expect(parsed.version).toBeDefined();
+      expect(parsed.metadata).toBeDefined();
     });
 
     it('should import valid settings', async () => {
@@ -263,7 +264,7 @@ describe('SettingsService', () => {
       };
 
       const exportedData = {
-        ...settingsToImport,
+        settings: settingsToImport,
         exportedAt: new Date().toISOString(),
         version: '1.0.0',
       };
