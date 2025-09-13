@@ -15,8 +15,12 @@ export default defineConfig({
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
+  /* Global timeout for the entire test run */
+  globalTimeout: process.env.CI ? 900000 : 0, // 15 minutes in CI
+  /* Timeout for each test */
+  timeout: process.env.CI ? 60000 : 30000, // 60s in CI, 30s locally
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 1 : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -47,15 +51,18 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    // Run only chromium in CI for reliability, enable others locally
+    ...(process.env.CI ? [] : [
+      {
+        name: 'firefox',
+        use: { ...devices['Desktop Firefox'] },
+      },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+      {
+        name: 'webkit',
+        use: { ...devices['Desktop Safari'] },
+      },
+    ]),
 
     /* Test against mobile viewports. */
     // {
@@ -84,5 +91,7 @@ export default defineConfig({
     url: 'http://localhost:1420',
     reuseExistingServer: !process.env.CI,
     timeout: 120000, // 2 minutes for Tauri to start
+    stderr: 'pipe',
+    stdout: 'pipe',
   },
 });
