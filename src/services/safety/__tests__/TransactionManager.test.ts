@@ -14,6 +14,7 @@ import type {
 const mockOperationJournal = {
   logOperation: vi.fn(),
   getOperations: vi.fn(),
+  getOperationHistory: vi.fn(),
   createRollbackScript: vi.fn(),
   executeRollback: vi.fn(),
   cleanupOldRecords: vi.fn()
@@ -22,10 +23,14 @@ const mockOperationJournal = {
 const mockFileSystemMonitor = {
   startMonitoring: vi.fn(),
   stopMonitoring: vi.fn(),
-  detectConflicts: vi.fn(),
-  onConflictDetected: vi.fn(),
-  getFileState: vi.fn(),
-  captureState: vi.fn()
+  detectConflicts: vi.fn().mockResolvedValue([]),
+  captureState: vi.fn(),
+  onFileChanged: vi.fn(),
+  onError: vi.fn(),
+  onSafetyEvent: vi.fn(),
+  suggestResolution: vi.fn(),
+  validateResolution: vi.fn(),
+  getCacheSize: vi.fn()
 }
 
 const mockSafetyValidator = {

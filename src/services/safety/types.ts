@@ -48,10 +48,17 @@ export interface FileSystemState {
 
 export interface FileStateInfo {
   path: string
+  exists: boolean
+  isFile: boolean
+  isDirectory: boolean
   size: number
-  lastModified: Date
-  checksum: string
-  permissions: string
+  mtime: Date | null
+  checksum: string | null
+  permissions: {
+    readable: boolean
+    writable: boolean
+    executable: boolean
+  }
   metadata?: Record<string, unknown>
 }
 
@@ -157,25 +164,33 @@ export enum SafetyErrorCode {
 }
 
 // Conflict detection and resolution
-export interface ConflictInfo {
+export interface FileConflict {
   id: string
   type: ConflictType
   operation: FileOperation
   conflictingPath: string
+  severity: ConflictSeverity
   detectedAt: Date
   resolution?: ConflictResolution
   resolvedAt?: Date
   metadata?: Record<string, unknown>
 }
 
-export enum ConflictType {
-  FILE_EXISTS = 'file_exists',
-  DIRECTORY_EXISTS = 'directory_exists',
-  EXTERNAL_MODIFICATION = 'external_modification',
-  CONCURRENT_ACCESS = 'concurrent_access',
-  PERMISSION_CONFLICT = 'permission_conflict',
-  CHECKSUM_MISMATCH = 'checksum_mismatch'
-}
+export interface ConflictInfo extends FileConflict {}
+
+export type ConflictType =
+  | 'file_exists'
+  | 'directory_exists'
+  | 'concurrent_modification'
+  | 'permission_denied'
+  | 'path_too_long'
+  | 'insufficient_space'
+  | 'external_modification'
+  | 'concurrent_access'
+  | 'permission_conflict'
+  | 'checksum_mismatch'
+
+export type ConflictSeverity = 'low' | 'medium' | 'high' | 'critical'
 
 // Backup integration
 export interface SafetyBackup {
@@ -256,12 +271,37 @@ export interface OperationJournal {
 }
 
 export interface FileSystemMonitor {
-  startMonitoring(paths: string[]): Promise<void>
+  startMonitoring(paths: string[], options?: MonitoringOptions): Promise<void>
   stopMonitoring(): Promise<void>
-  detectConflicts(operation: FileOperation): Promise<ConflictInfo[]>
-  onConflictDetected(callback: (conflict: ConflictInfo) => void): () => void
-  getFileState(path: string): Promise<FileStateInfo | null>
-  captureState(paths: string[]): Promise<FileSystemState>
+  detectConflicts(operation: FileOperation): Promise<FileConflict[]>
+  captureState(path: string): Promise<FileStateInfo>
+  onFileChanged(callback: (event: FileChangeEvent) => void): () => void
+  onError(callback: (error: SafetyError) => void): () => void
+  onSafetyEvent(callback: (event: SafetyEvent) => void): () => void
+  suggestResolution(conflict: FileConflict): Promise<ConflictResolutionSuggestion>
+  validateResolution(conflict: FileConflict, resolution: ConflictResolutionSuggestion): Promise<boolean>
+  getCacheSize(): Promise<number>
+}
+
+export interface MonitoringOptions {
+  recursive?: boolean
+  interval?: number
+  ignoreHidden?: boolean
+  excludePatterns?: string[]
+}
+
+export interface FileChangeEvent {
+  type: 'change' | 'rename'
+  path: string
+  timestamp: Date
+}
+
+export interface ConflictResolutionSuggestion {
+  strategy: 'rename' | 'overwrite' | 'merge' | 'manual'
+  suggestedPath?: string
+  automatic: boolean
+  confidence: number
+  requiresUserInput?: boolean
 }
 
 export interface SafetyValidator {
