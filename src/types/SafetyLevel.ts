@@ -1,0 +1,1 @@
+export type SafetyLevel = 'basic' | 'enhanced' | 'maximum' | 'unknown';

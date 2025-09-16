@@ -422,7 +422,8 @@ describe('JohnnyDecimalEngine', () => {
       expect(validation.warnings).toContainEqual({
         field: 'item.files',
         message: 'File missing-file.pdf referenced in item Letters does not exist',
-        suggestion: 'Remove the file reference or restore the missing file'
+        suggestion: 'Remove the file reference or restore the missing file',
+        code: 'MISSING_FILE'
       });
     });
   });

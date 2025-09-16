@@ -22,6 +22,7 @@ export interface FileOperation {
   safetyLevel: SafetyLevel
   timestamp: Date
   checksum?: string
+  overwrite?: boolean
 }
 
 // Transaction definition

@@ -3,13 +3,17 @@ import { invoke } from "@tauri-apps/api/core";
 import { TreeView } from "./components/ui/TreeView";
 import { OrganizationPanel } from "./components/ui/OrganizationPanel";
 import { ProgressIndicator } from "./components/ui/ProgressIndicator";
-import type { 
-  FileSystemItem, 
+import { SafetyDashboard } from "./components/safety/SafetyDashboard";
+import type {
+  FileSystemItem,
   JohnnyDecimalStructure,
   OrganizationSuggestion,
   JDArea,
   JDCategory,
-  JDItem
+  JDItem,
+  FileOperation,
+  ValidationResult,
+  SafetyLevel,
 } from "./types";
 
 // Sample data for demonstration
@@ -269,6 +273,13 @@ function App() {
   const [progressValue, setProgressValue] = useState<number | undefined>(undefined);
   const [progressLabel, setProgressLabel] = useState("Ready to organize files");
 
+  // Safety System State
+  const [operation, setOperation] = useState<FileOperation | null>(null);
+  const [validationResult, setValidationResult] = useState<ValidationResult | null>(null);
+  const [safetyLevel, setSafetyLevel] = useState<SafetyLevel>('enhanced');
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+
+
   async function greet() {
     try {
       // Check if we're in a Tauri environment
@@ -328,13 +339,47 @@ function App() {
 
   const handleAcceptSuggestion = useCallback((suggestion: OrganizationSuggestion) => {
     console.log(`Accepting suggestion for ${suggestion.file.name}`);
+    
+    const newOperation: FileOperation = {
+        id: `op-${Date.now()}`,
+        type: 'move',
+        sourcePath: suggestion.file.path,
+        destinationPath: `${suggestion.suggestedArea.name}/${suggestion.suggestedCategory.name}/${suggestion.suggestedItem?.name}/${suggestion.file.name}`,
+        status: 'pending',
+        sourceePath: suggestion.file.path,
+    };
+
+    // Simulate validation
+    const mockValidation: ValidationResult = {
+        isValid: true,
+        warnings: [{ code: 'FILE_OVERWRITE', message: `File will be overwritten at ${newOperation.destinationPath}` }],
+        errors: [],
+    };
+
+    setOperation(newOperation);
+    setValidationResult(mockValidation);
+    setIsConfirmationOpen(true);
+  }, []);
+
+  const handleConfirmOperation = useCallback(() => {
+    if (!operation) return;
+
+    console.log(`Confirming operation for ${operation.sourcePath}`);
+    setIsConfirmationOpen(false);
     setProgressValue(0);
     setProgressLabel("Moving files...");
-    
+
     setTimeout(() => {
       setProgressValue(100);
       setProgressLabel("File moved successfully!");
+      setOperation(null);
     }, 1000);
+  }, [operation]);
+
+  const handleCancelOperation = useCallback(() => {
+    console.log('Operation cancelled');
+    setIsConfirmationOpen(false);
+    setOperation(null);
   }, []);
 
   const handleRejectSuggestion = useCallback((suggestion: OrganizationSuggestion) => {
@@ -346,6 +391,16 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900" data-testid="app-container">
+      {operation && validationResult && (
+        <SafetyDashboard
+          operation={operation}
+          validationResult={validationResult}
+          safetyLevel={safetyLevel}
+          isConfirmationOpen={isConfirmationOpen}
+          onConfirm={handleConfirmOperation}
+          onCancel={handleCancelOperation}
+        />
+      )}
       <div className="container mx-auto p-4 max-w-7xl">
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
