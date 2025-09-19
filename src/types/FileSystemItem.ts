@@ -7,4 +7,6 @@ export interface FileSystemItem {
   createdAt: Date;
   modifiedAt: Date;
   children?: FileSystemItem[];
+  extension?: string;
+  isHidden?: boolean;
 }

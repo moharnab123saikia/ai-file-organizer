@@ -5,6 +5,7 @@ import { JDArea, JDCategory } from './JohnnyDecimal';
 export interface FileInfo extends FileSystemItem {
   content?: string;
   extension?: string;
+  lastModified?: Date;
 }
 
 export interface FileOrganizationSuggestion {
