@@ -103,7 +103,7 @@ export class FileSystemMonitor extends EventEmitter implements IFileSystemMonito
 
           // In test environment, store the callback so mock events can trigger it
           if (process.env.NODE_ENV === 'test') {
-            // @ts-ignore - adding callback property for test access
+            // @ts-expect-error - adding callback property for test access
             watcher._callback = callback
           }
 

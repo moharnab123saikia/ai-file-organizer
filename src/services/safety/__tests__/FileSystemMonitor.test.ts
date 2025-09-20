@@ -53,8 +53,8 @@ describe('FileSystemMonitor', () => {
     ;(mockWatcher as any)._callback = null
     
     // Mock fs.watch to capture the callback and store it on the watcher
-    mockFsSync.watch = vi.fn().mockImplementation((path: string, options: any, callback: Function) => {
-      ;(mockWatcher as any)._callback = callback
+    mockFsSync.watch = vi.fn().mockImplementation((path: string, options: any, callback: (eventType: string, filename: string | null) => void) => {
+      (mockWatcher as any)._callback = callback
       return mockWatcher
     })
     
@@ -65,7 +65,7 @@ describe('FileSystemMonitor', () => {
       
       // If this is a file system event and we have a callback, call it
       if ((event === 'change' || event === 'rename') && (mockWatcher as any)._callback) {
-        ;(mockWatcher as any)._callback(event, args[0])
+        (mockWatcher as any)._callback(event, args[0])
       }
       
       return result

@@ -18,8 +18,8 @@ export class SafetyValidator {
   }
 
   async validateOperation(operation: FileOperation): Promise<ValidationResult> {
-    let errors: ValidationError[] = [];
-    let warnings: ValidationWarning[] = [];
+    const errors: ValidationError[] = [];
+    const warnings: ValidationWarning[] = [];
 
     // --- Validation Pipeline ---
 

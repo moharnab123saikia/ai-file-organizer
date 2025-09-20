@@ -1,5 +1,6 @@
 import { promises as fs, Stats } from 'fs'
 import { join, relative } from 'path'
+import { createHash } from 'crypto'
 import { BackupStrategy } from './BackupStrategy'
 import type {
   BackupData,
@@ -359,7 +360,7 @@ export class MetadataBackupStrategy extends BackupStrategy {
    */
   private createMetadataHash(stats: Stats, filePath: string): string {
     const metadataString = `${filePath}-${stats.size}-${stats.mtime.getTime()}-${stats.mode}`
-    return require('crypto').createHash('sha256').update(metadataString).digest('hex')
+    return createHash('sha256').update(metadataString).digest('hex')
   }
 
   /**

@@ -24,13 +24,6 @@ pub struct AnalysisResult {
     pub tags: Vec<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ModelInfo {
-    pub name: String,
-    pub size: String,
-    pub status: String,
-    pub digest: Option<String>,
-}
 
 #[allow(dead_code)]
 pub struct OllamaService {

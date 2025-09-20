@@ -440,17 +440,19 @@ export class RestoreEngine {
       case 'skip':
         return false
 
-      case 'rename':
+      case 'rename': {
         const backupPath = this.generateBackupPath(targetPath)
         await this.restoreFile(fileEntry, backupPath)
         return true
+      }
 
-      case 'prompt':
+      case 'prompt': {
         // In a real implementation, this would prompt the user
         // For now, default to rename
         const promptBackupPath = this.generateBackupPath(targetPath)
         await this.restoreFile(fileEntry, promptBackupPath)
         return true
+      }
 
       default:
         return false

@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs'
 import { join, relative } from 'path'
+import { createHash } from 'crypto'
 import { BackupStrategy } from './BackupStrategy'
 import type {
   BackupData,
@@ -282,8 +283,8 @@ export class FullBackupStrategy extends BackupStrategy {
       }
 
       // Calculate content hash
-      const contentHash = content ? 
-        require('crypto').createHash('sha256').update(content).digest('hex') :
+      const contentHash = content ?
+        createHash('sha256').update(content).digest('hex') :
         'no-content'
 
       return {
