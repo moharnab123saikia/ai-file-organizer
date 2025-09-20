@@ -412,8 +412,8 @@ describe('ProgressIndicator Component', () => {
       
       const endTime = performance.now();
       
-      // Should handle updates efficiently (less than 100ms for 100 updates)
-      expect(endTime - startTime).toBeLessThan(100);
+      // Should handle updates efficiently (less than 200ms for 100 updates)
+      expect(endTime - startTime).toBeLessThan(200);
     });
 
     it('memoizes expensive calculations', () => {

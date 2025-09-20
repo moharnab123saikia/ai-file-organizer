@@ -8,9 +8,13 @@ import type {
 } from '../../types';
 
 const DEFAULT_CONFIG: OllamaConfiguration = {
-  host: 'http://localhost:11434',
-  model: 'llama2',
-  timeout: 30000
+  baseUrl: 'http://localhost:11434',
+  timeout: 30000,
+  defaultModel: 'llama2',
+  temperature: 0.7,
+  maxTokens: 2048,
+  retryAttempts: 3,
+  retryDelay: 1000
 };
 
 export class OllamaService {
@@ -28,7 +32,7 @@ export class OllamaService {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), this.config.timeout);
       
-      const response = await fetch(`${this.config.host}/api/version`, {
+      const response = await fetch(`${this.config.baseUrl}/api/version`, {
         method: 'GET',
         signal: controller.signal
       });
@@ -48,7 +52,7 @@ export class OllamaService {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), this.config.timeout);
 
-      const response = await fetch(`${this.config.host}/api/tags`, {
+      const response = await fetch(`${this.config.baseUrl}/api/tags`, {
         method: 'GET',
         signal: controller.signal
       });
@@ -77,10 +81,10 @@ export class OllamaService {
       // Use configured model if none specified in request
       const requestWithModel = {
         ...request,
-        model: request.model || this.config.model
+        model: request.model || this.config.defaultModel
       };
 
-      const response = await fetch(`${this.config.host}/api/generate`, {
+      const response = await fetch(`${this.config.baseUrl}/api/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestWithModel),
@@ -106,6 +110,7 @@ export class OllamaService {
     const prompt = this.createFileAnalysisPrompt(file);
     
     const request: OllamaRequest = {
+      model: this.config.defaultModel,
       prompt,
       stream: false
     };
@@ -133,6 +138,7 @@ export class OllamaService {
     const prompt = this.createJohnnyDecimalPrompt(files);
     
     const request: OllamaRequest = {
+      model: this.config.defaultModel,
       prompt,
       stream: false
     };

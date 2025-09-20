@@ -261,20 +261,26 @@ describe('JohnnyDecimalEngine', () => {
       
       files = [
         {
+          id: 'file-1',
           name: 'invoice-2024-001.pdf',
           path: '/test/invoice-2024-001.pdf',
           size: 1024,
           type: 'file',
           extension: '.pdf',
+          createdAt: new Date('2024-01-01'),
+          modifiedAt: new Date('2024-01-01'),
           lastModified: new Date('2024-01-01'),
           content: 'Invoice for services rendered...'
         },
         {
+          id: 'file-2',
           name: 'meeting-notes.docx',
           path: '/test/meeting-notes.docx',
           size: 2048,
           type: 'file',
           extension: '.docx',
+          createdAt: new Date('2024-01-02'),
+          modifiedAt: new Date('2024-01-02'),
           lastModified: new Date('2024-01-02')
         }
       ];
@@ -432,19 +438,25 @@ describe('JohnnyDecimalEngine', () => {
     it('should suggest organization for unstructured files', async () => {
       const files: FileInfo[] = [
         {
+          id: 'file-3',
           name: 'project-proposal.pdf',
           path: '/test/project-proposal.pdf',
           size: 1024,
           type: 'file',
           extension: '.pdf',
+          createdAt: new Date(),
+          modifiedAt: new Date(),
           lastModified: new Date()
         },
         {
+          id: 'file-4',
           name: 'budget-2024.xlsx',
           path: '/test/budget-2024.xlsx',
           size: 2048,
           type: 'file',
           extension: '.xlsx',
+          createdAt: new Date(),
+          modifiedAt: new Date(),
           lastModified: new Date()
         }
       ];
@@ -468,9 +480,9 @@ describe('JohnnyDecimalEngine', () => {
 
     it('should group similar files together', async () => {
       const files: FileInfo[] = [
-        { name: 'invoice1.pdf', path: '/test/invoice1.pdf', size: 1024, type: 'file', extension: '.pdf', lastModified: new Date() },
-        { name: 'invoice2.pdf', path: '/test/invoice2.pdf', size: 1024, type: 'file', extension: '.pdf', lastModified: new Date() },
-        { name: 'receipt1.pdf', path: '/test/receipt1.pdf', size: 1024, type: 'file', extension: '.pdf', lastModified: new Date() }
+        { id: 'file-5', name: 'invoice1.pdf', path: '/test/invoice1.pdf', size: 1024, type: 'file', extension: '.pdf', createdAt: new Date(), modifiedAt: new Date(), lastModified: new Date() },
+        { id: 'file-6', name: 'invoice2.pdf', path: '/test/invoice2.pdf', size: 1024, type: 'file', extension: '.pdf', createdAt: new Date(), modifiedAt: new Date(), lastModified: new Date() },
+        { id: 'file-7', name: 'receipt1.pdf', path: '/test/receipt1.pdf', size: 1024, type: 'file', extension: '.pdf', createdAt: new Date(), modifiedAt: new Date(), lastModified: new Date() }
       ];
 
       const suggestions = await engine.getOrganizationSuggestions(files);

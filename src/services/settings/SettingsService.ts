@@ -55,8 +55,11 @@ export class SettingsService {
     
     this.emitEvent({
       type: 'theme',
-      settings: themeSettings,
+      key: 'theme',
+      oldValue: this.settings.theme,
+      newValue: themeSettings,
       timestamp: new Date(),
+      settings: { theme: themeSettings },
     });
   }
 
@@ -71,8 +74,11 @@ export class SettingsService {
     
     this.emitEvent({
       type: 'scan',
-      settings: scanSettings,
+      key: 'scan',
+      oldValue: this.settings.scan,
+      newValue: scanSettings,
       timestamp: new Date(),
+      settings: { scan: scanSettings },
     });
   }
 
@@ -87,8 +93,11 @@ export class SettingsService {
     
     this.emitEvent({
       type: 'ai',
-      settings: aiSettings,
+      key: 'ai',
+      oldValue: this.settings.ai,
+      newValue: aiSettings,
       timestamp: new Date(),
+      settings: { ai: aiSettings },
     });
   }
 
@@ -103,8 +112,11 @@ export class SettingsService {
     
     this.emitEvent({
       type: 'organization',
-      settings: orgSettings,
+      key: 'organization',
+      oldValue: this.settings.organization,
+      newValue: orgSettings,
       timestamp: new Date(),
+      settings: { organization: orgSettings },
     });
   }
 
@@ -119,8 +131,11 @@ export class SettingsService {
     
     this.emitEvent({
       type: 'general',
-      settings: generalSettings,
+      key: 'general',
+      oldValue: this.settings.general,
+      newValue: generalSettings,
       timestamp: new Date(),
+      settings: { general: generalSettings },
     });
   }
 
@@ -133,8 +148,11 @@ export class SettingsService {
     
     this.emitEvent({
       type: 'reset',
-      settings: this.settings,
+      key: 'all',
+      oldValue: this.settings,
+      newValue: this.settings,
       timestamp: new Date(),
+      settings: this.settings,
     });
   }
 
@@ -173,9 +191,12 @@ export class SettingsService {
       await this.saveSettings();
       
       this.emitEvent({
-        type: 'reset',
-        settings: this.settings,
+        type: 'import',
+        key: 'all',
+        oldValue: this.settings,
+        newValue: this.settings,
         timestamp: new Date(),
+        settings: this.settings,
       });
     } catch (error) {
       if (error instanceof SyntaxError) {
@@ -334,6 +355,8 @@ export class SettingsService {
         mode: 'light',
         primaryColor: '#007bff',
         fontSize: 'medium',
+        highContrast: false,
+        animations: true,
         compactMode: false,
       },
       scan: {
@@ -342,27 +365,40 @@ export class SettingsService {
         excludePatterns: ['node_modules', '.git', 'dist', 'build'],
         maxFileSize: 100 * 1024 * 1024, // 100MB
         followSymlinks: false,
+        scanThreads: 4,
       },
       ai: {
         provider: 'ollama',
         model: 'llama3.2',
         maxTokens: 2048,
         temperature: 0.7,
+        timeout: 30000,
         endpoint: 'http://localhost:11434',
         enabled: true,
+        retryAttempts: 3,
       },
       organization: {
+        defaultStructure: 'johnny-decimal',
+        autoApplyRules: false,
+        createBackups: true,
+        confirmOperations: true,
+        preserveOriginalPaths: false,
+        defaultCategories: ['Documents', 'Media', 'Projects'],
         autoOrganize: false,
         confirmBeforeMove: true,
-        createBackups: true,
         preserveOriginalStructure: true,
+        customRules: [],
       },
       general: {
         language: 'en',
         autoSave: true,
+        confirmBeforeExit: true,
+        showWelcomeScreen: true,
+        enableAnalytics: false,
+        checkForUpdates: true,
         confirmOnExit: true,
         showTips: true,
-        checkForUpdates: true,
+        showNotifications: true,
       },
     };
   }

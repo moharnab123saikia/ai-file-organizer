@@ -192,47 +192,69 @@ const sampleJohnnyDecimalStructure: JohnnyDecimalStructure = {
 
 const sampleSuggestions: OrganizationSuggestion[] = [
   {
+    id: "suggestion-1",
     file: {
+      id: "annual-report",
       name: "Annual Report.pdf",
       path: "/Users/demo/Documents/Annual Report.pdf",
       size: 1048576,
       type: "file",
+      createdAt: new Date(),
+      modifiedAt: new Date(),
       lastModified: new Date()
     },
     suggestedArea: {
       number: 20,
-      name: "Work Documents"
+      name: "Work Documents",
+      isActive: true,
+      categories: []
     },
     suggestedCategory: {
       number: 21,
-      name: "Reports"
+      name: "Reports",
+      isActive: true,
+      items: []
     },
     suggestedItem: {
       number: "21.01",
-      name: "Annual Report"
+      name: "Annual Report",
+      files: [],
+      tags: [],
+      isActive: true
     },
     confidence: 0.95,
     reasoning: "Business document containing annual performance data should be categorized under work reports"
   },
   {
+    id: "suggestion-2",
     file: {
+      id: "vacation-photo",
       name: "Vacation 2024.jpg",
       path: "/Users/demo/Documents/Photos/Vacation 2024.jpg",
       size: 5242880,
       type: "file",
+      createdAt: new Date(),
+      modifiedAt: new Date(),
       lastModified: new Date()
     },
     suggestedArea: {
       number: 30,
-      name: "Personal Life"
+      name: "Personal Life",
+      isActive: true,
+      categories: []
     },
     suggestedCategory: {
       number: 31,
-      name: "Photos"
+      name: "Photos",
+      isActive: true,
+      items: []
     },
     suggestedItem: {
       number: "31.01",
-      name: "Vacation Photos"
+      name: "Vacation Photos",
+      files: [],
+      tags: [],
+      isActive: true
     },
     confidence: 0.88,
     reasoning: "Personal photo should be organized under personal life category"
@@ -346,7 +368,6 @@ function App() {
         sourcePath: suggestion.file.path,
         destinationPath: `${suggestion.suggestedArea.name}/${suggestion.suggestedCategory.name}/${suggestion.suggestedItem?.name}/${suggestion.file.name}`,
         status: 'pending',
-        sourceePath: suggestion.file.path,
     };
 
     // Simulate validation

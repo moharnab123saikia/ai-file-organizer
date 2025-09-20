@@ -86,6 +86,7 @@ describe('Component Integration Tests', () => {
   const mockJohnnyDecimalStructure: JohnnyDecimalStructure = {
     id: 'test-structure',
     name: 'Test Structure',
+    description: 'Test Johnny Decimal structure for integration testing',
     rootPath: '/project',
     areas: [
       {
@@ -295,21 +296,29 @@ describe('Component Integration Tests', () => {
       
       const suggestions: OrganizationSuggestion[] = [
         {
+          id: 'suggestion-1',
           file: {
+            id: 'file-1',
             name: 'App.tsx',
             path: '/project/src/App.tsx',
             size: 1024,
             type: 'file' as const,
             extension: 'tsx',
+            createdAt: new Date(),
+            modifiedAt: new Date(),
             lastModified: new Date()
           },
           suggestedArea: {
             number: 20,
-            name: 'Development'
+            name: 'Development',
+            isActive: true,
+            categories: []
           },
           suggestedCategory: {
             number: 21,
-            name: 'Source Code'
+            name: 'Source Code',
+            isActive: true,
+            items: []
           },
           confidence: 0.95,
           reasoning: 'TypeScript files belong in source code'

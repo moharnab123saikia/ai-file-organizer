@@ -10,8 +10,7 @@ const mockOperation: FileOperation = {
   type: 'move',
   sourcePath: '/test/source.txt',
   destinationPath: '/test/destination.txt',
-  status: 'pending',
-  sourceePath: '',
+  status: 'pending'
 };
 
 const mockValidationResult: ValidationResult = {

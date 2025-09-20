@@ -62,7 +62,7 @@ export class BackupStorage {
 
       // Apply compression if enabled
       if (this.options.compression) {
-        dataToStore = await gzipAsync(dataToStore)
+        dataToStore = Buffer.from(await gzipAsync(dataToStore))
         
         // Update compression ratio
         const originalSize = Buffer.byteLength(serializedData, 'utf8')

@@ -16,7 +16,7 @@ export interface OllamaModel {
 }
 
 export interface OllamaRequest {
-  model: string;
+  model?: string;
   prompt: string;
   stream?: boolean;
   options?: {

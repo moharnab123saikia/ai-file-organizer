@@ -114,6 +114,7 @@ global.createMockJohnnyDecimalStructure = () => ({
   createdAt: new Date('2025-01-01T10:00:00Z'),
   modifiedAt: new Date('2025-01-01T12:00:00Z'),
   version: '1.0.0',
+  description: 'Mock Johnny Decimal structure for testing',
   areas: [
     {
       number: 10,

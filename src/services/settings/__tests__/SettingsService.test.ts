@@ -23,6 +23,8 @@ describe('SettingsService', () => {
       primaryColor: '#007bff',
       fontSize: 'medium',
       compactMode: false,
+      highContrast: false,
+      animations: true,
     },
     scan: {
       maxDepth: 10,
@@ -30,6 +32,7 @@ describe('SettingsService', () => {
       excludePatterns: ['node_modules', '.git', 'dist', 'build'],
       maxFileSize: 100 * 1024 * 1024, // 100MB
       followSymlinks: false,
+      scanThreads: 4,
     },
     ai: {
       provider: 'ollama',
@@ -38,12 +41,20 @@ describe('SettingsService', () => {
       temperature: 0.7,
       endpoint: 'http://localhost:11434',
       enabled: true,
+      timeout: 30000,
+      retryAttempts: 3,
     },
     organization: {
       autoOrganize: false,
       confirmBeforeMove: true,
       createBackups: true,
       preserveOriginalStructure: true,
+      defaultStructure: 'johnny-decimal',
+      autoApplyRules: false,
+      confirmOperations: true,
+      preserveOriginalPaths: false,
+      defaultCategories: ['Documents', 'Media', 'Projects'],
+      customRules: [],
     },
     general: {
       language: 'en',
@@ -51,6 +62,10 @@ describe('SettingsService', () => {
       confirmOnExit: true,
       showTips: true,
       checkForUpdates: true,
+      confirmBeforeExit: true,
+      showWelcomeScreen: true,
+      enableAnalytics: false,
+      showNotifications: true,
     },
   };
 
@@ -77,6 +92,8 @@ describe('SettingsService', () => {
           primaryColor: '#ff6b35',
           fontSize: 'large',
           compactMode: true,
+          highContrast: false,
+          animations: true,
         },
         ai: {
           provider: 'ollama',
@@ -85,6 +102,8 @@ describe('SettingsService', () => {
           temperature: 0.5,
           endpoint: 'http://localhost:11434',
           enabled: false,
+          timeout: 30000,
+          retryAttempts: 3,
         },
       };
 
@@ -120,6 +139,8 @@ describe('SettingsService', () => {
         primaryColor: '#28a745',
         fontSize: 'large',
         compactMode: true,
+        highContrast: false,
+        animations: true,
       };
 
       await settingsService.updateThemeSettings(newTheme);
@@ -139,6 +160,7 @@ describe('SettingsService', () => {
         excludePatterns: ['node_modules', '.git'],
         maxFileSize: 50 * 1024 * 1024,
         followSymlinks: true,
+        scanThreads: 2,
       };
 
       await settingsService.updateScanSettings(newScan);
@@ -155,6 +177,8 @@ describe('SettingsService', () => {
         temperature: 0.3,
         endpoint: 'http://localhost:11434',
         enabled: false,
+        timeout: 15000,
+        retryAttempts: 2,
       };
 
       await settingsService.updateAISettings(newAI);
@@ -169,6 +193,12 @@ describe('SettingsService', () => {
         confirmBeforeMove: false,
         createBackups: false,
         preserveOriginalStructure: false,
+        defaultStructure: 'date-based',
+        autoApplyRules: true,
+        confirmOperations: false,
+        preserveOriginalPaths: false,
+        defaultCategories: ['Work', 'Personal'],
+        customRules: []
       };
 
       await settingsService.updateOrganizationSettings(newOrg);
@@ -203,6 +233,8 @@ describe('SettingsService', () => {
         primaryColor: '#007bff',
         fontSize: 'medium',
         compactMode: false,
+        highContrast: false,
+        animations: true,
       };
 
       const invalidTheme = { ...validTheme, mode: 'rainbow' as any };
@@ -217,6 +249,8 @@ describe('SettingsService', () => {
         primaryColor: '#ff6b35',
         fontSize: 'medium',
         compactMode: false,
+        highContrast: false,
+        animations: true,
       };
 
       const invalidTheme = { ...validTheme, primaryColor: 'not-a-color' };
@@ -232,6 +266,7 @@ describe('SettingsService', () => {
         excludePatterns: ['node_modules'],
         maxFileSize: 1024 * 1024,
         followSymlinks: false,
+        scanThreads: 4,
       };
 
       const invalidScan = { ...validScan, maxDepth: -1 };
@@ -301,13 +336,18 @@ describe('SettingsService', () => {
         primaryColor: '#28a745',
         fontSize: 'large',
         compactMode: true,
+        highContrast: false,
+        animations: true,
       };
 
       await settingsService.updateThemeSettings(newTheme);
 
       expect(eventSpy).toHaveBeenCalledWith({
         type: 'theme',
-        settings: newTheme,
+        key: 'theme',
+        oldValue: newTheme,
+        newValue: newTheme,
+        settings: { theme: newTheme },
         timestamp: expect.any(Date),
       });
     });
@@ -324,6 +364,8 @@ describe('SettingsService', () => {
         primaryColor: '#007bff',
         fontSize: 'medium',
         compactMode: false,
+        highContrast: false,
+        animations: true,
       });
 
       expect(eventSpy1).toHaveBeenCalled();
@@ -341,6 +383,8 @@ describe('SettingsService', () => {
         primaryColor: '#007bff',
         fontSize: 'medium',
         compactMode: false,
+        highContrast: false,
+        animations: true,
       });
 
       expect(eventSpy).not.toHaveBeenCalled();
@@ -360,6 +404,8 @@ describe('SettingsService', () => {
         primaryColor: '#ff0000',
         fontSize: 'large',
         compactMode: true,
+        highContrast: false,
+        animations: true,
       });
 
       // Then reset
@@ -367,10 +413,17 @@ describe('SettingsService', () => {
       const settings = settingsService.getSettings();
 
       expect(settings).toEqual(defaultSettings);
+      
+      // Check that localStorage.setItem was called with the correct key and valid settings data
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         'ai-file-organizer-settings',
-        JSON.stringify(defaultSettings)
+        expect.any(String)
       );
+      
+      // Verify the last call contains the default settings
+      const lastCall = mockLocalStorage.setItem.mock.calls[mockLocalStorage.setItem.mock.calls.length - 1];
+      const savedSettings = JSON.parse(lastCall[1]);
+      expect(savedSettings).toEqual(defaultSettings);
     });
 
     it('should emit reset event', async () => {
@@ -381,6 +434,9 @@ describe('SettingsService', () => {
 
       expect(eventSpy).toHaveBeenCalledWith({
         type: 'reset',
+        key: 'all',
+        oldValue: defaultSettings,
+        newValue: defaultSettings,
         settings: defaultSettings,
         timestamp: expect.any(Date),
       });

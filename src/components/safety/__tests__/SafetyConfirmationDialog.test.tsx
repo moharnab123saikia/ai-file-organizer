@@ -9,8 +9,7 @@ const mockOperation: FileOperation = {
   sourcePath: '/test/source.txt',
   destinationPath: '/test/destination.txt',
   id: 'op-1',
-  status: 'pending',
-  sourceePath: '',
+  status: 'pending'
 };
 
 describe('SafetyConfirmationDialog', () => {

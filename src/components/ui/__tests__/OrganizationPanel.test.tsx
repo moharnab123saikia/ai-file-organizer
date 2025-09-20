@@ -68,6 +68,7 @@ const mockFiles: FileSystemItem[] = [
 const mockStructure: JohnnyDecimalStructure = {
   id: 'test-structure',
   name: 'Test Structure',
+  description: 'Test Johnny Decimal structure for organization panel testing',
   rootPath: '/test',
   createdAt: new Date('2024-01-01'),
   modifiedAt: new Date('2024-01-01'),
@@ -90,7 +91,7 @@ const mockStructure: JohnnyDecimalStructure = {
             {
               number: '11.01',
               name: 'Business Letters',
-              description: 'Formal business correspondence', 
+              description: 'Formal business correspondence',
               files: [],
               tags: [],
               isActive: true
@@ -104,25 +105,36 @@ const mockStructure: JohnnyDecimalStructure = {
 
 const mockSuggestions: OrganizationSuggestion[] = [
   {
+    id: 'suggestion-1',
     file: {
+      id: 'file-1',
       name: 'document.pdf',
       path: '/test/document.pdf',
       size: 1024000,
       type: 'file',
       extension: 'pdf',
+      createdAt: new Date('2024-01-01'),
+      modifiedAt: new Date('2024-01-01'),
       lastModified: new Date('2024-01-01')
     },
     suggestedArea: {
       number: 10,
-      name: 'Administration'
+      name: 'Administration',
+      isActive: true,
+      categories: []
     },
     suggestedCategory: {
       number: 11,
-      name: 'Correspondence'
+      name: 'Correspondence',
+      isActive: true,
+      items: []
     },
     suggestedItem: {
       number: '11.01',
-      name: 'Business Letters'
+      name: 'Business Letters',
+      files: [],
+      tags: [],
+      isActive: true
     },
     confidence: 0.85,
     reasoning: 'PDF document likely contains business correspondence'

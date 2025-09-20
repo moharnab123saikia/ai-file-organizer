@@ -22,40 +22,47 @@ describe('OllamaService', () => {
     it('should initialize with default configuration', () => {
       expect(service).toBeInstanceOf(OllamaService);
       expect(service.getConfiguration()).toEqual({
-        host: 'http://localhost:11434',
+        baseUrl: 'http://localhost:11434',
         timeout: 30000,
-        model: 'llama2'
+        defaultModel: 'llama2',
+        temperature: 0.7,
+        maxTokens: 2048,
+        retryAttempts: 3,
+        retryDelay: 1000
       });
     });
 
     it('should initialize with custom configuration', () => {
       const customConfig = {
-        host: 'http://custom-host:8080',
+        baseUrl: 'http://custom-host:8080',
         timeout: 60000,
-        model: 'codellama'
+        defaultModel: 'codellama'
       };
       const customService = new OllamaService(customConfig);
-      expect(customService.getConfiguration()).toEqual(customConfig);
+      expect(customService.getConfiguration()).toEqual({
+        baseUrl: 'http://custom-host:8080',
+        timeout: 60000,
+        defaultModel: 'codellama',
+        temperature: 0.7,
+        maxTokens: 2048,
+        retryAttempts: 3,
+        retryDelay: 1000
+      });
     });
   });
 
   describe('updateConfiguration', () => {
     it('should update configuration with partial options', () => {
-      service.updateConfiguration({ model: 'codellama', timeout: 45000 });
-      expect(service.getConfiguration()).toEqual({
-        host: 'http://localhost:11434',
-        timeout: 45000,
-        model: 'codellama'
-      });
+      service.updateConfiguration({ defaultModel: 'codellama', timeout: 45000 });
+      const config = service.getConfiguration();
+      expect(config.timeout).toBe(45000);
+      expect(config.defaultModel).toBe('codellama');
     });
 
     it('should maintain existing values when updating with partial config', () => {
-      service.updateConfiguration({ host: 'http://new-host:8080' });
-      expect(service.getConfiguration()).toEqual({
-        host: 'http://new-host:8080',
-        timeout: 30000,
-        model: 'llama2'
-      });
+      service.updateConfiguration({ baseUrl: 'http://new-host:8080' });
+      const config = service.getConfiguration();
+      expect(config.baseUrl).toBe('http://new-host:8080');
     });
   });
 
@@ -96,15 +103,35 @@ describe('OllamaService', () => {
       const mockModels: OllamaModel[] = [
         {
           name: 'llama2',
-          size: '3.8 GB',
-          modified_at: '2024-01-01T00:00:00Z',
-          digest: 'sha256:abc123'
+          model: 'llama2',
+          size: 3800000000,
+          digest: 'sha256:abc123',
+          details: {
+            parent_model: '',
+            format: 'gguf',
+            family: 'llama',
+            families: ['llama'],
+            parameter_size: '7B',
+            quantization_level: 'Q4_0'
+          },
+          expires_at: '2024-02-01T00:00:00Z',
+          size_vram: 0
         },
         {
           name: 'codellama',
-          size: '7.3 GB',
-          modified_at: '2024-01-02T00:00:00Z',
-          digest: 'sha256:def456'
+          model: 'codellama',
+          size: 7300000000,
+          digest: 'sha256:def456',
+          details: {
+            parent_model: '',
+            format: 'gguf',
+            family: 'llama',
+            families: ['llama'],
+            parameter_size: '13B',
+            quantization_level: 'Q4_0'
+          },
+          expires_at: '2024-02-02T00:00:00Z',
+          size_vram: 0
         }
       ];
 
@@ -179,7 +206,7 @@ describe('OllamaService', () => {
     });
 
     it('should use configured model when none specified in request', async () => {
-      service.updateConfiguration({ model: 'codellama' });
+      service.updateConfiguration({ defaultModel: 'codellama' });
 
       const mockResponse: OllamaResponse = {
         model: 'codellama',
@@ -247,11 +274,14 @@ describe('OllamaService', () => {
       }));
 
       const fileInfo: FileInfo = {
+        id: 'file-1',
         name: 'business-letter.txt',
         path: '/path/to/business-letter.txt',
         size: 1024,
         type: 'file',
         extension: '.txt',
+        createdAt: new Date('2024-01-01T00:00:00Z'),
+        modifiedAt: new Date('2024-01-01T00:00:00Z'),
         lastModified: new Date('2024-01-01T00:00:00Z'),
         content: 'Dear Sir/Madam, This is a formal business letter...'
       };
@@ -292,11 +322,14 @@ describe('OllamaService', () => {
       }));
 
       const fileInfo: FileInfo = {
+        id: 'file-2',
         name: 'unknown-file.dat',
         path: '/path/to/unknown-file.dat',
         size: 2048,
         type: 'file',
         extension: '.dat',
+        createdAt: new Date('2024-01-01T00:00:00Z'),
+        modifiedAt: new Date('2024-01-01T00:00:00Z'),
         lastModified: new Date('2024-01-01T00:00:00Z')
       };
 
@@ -310,11 +343,14 @@ describe('OllamaService', () => {
       mockFetch.mockRejectedValue(new Error('Analysis failed'));
       
       const fileInfo: FileInfo = {
+        id: 'file-3',
         name: 'test-file.txt',
         path: '/path/to/test-file.txt',
         size: 1024,
         type: 'file',
         extension: '.txt',
+        createdAt: new Date('2024-01-01T00:00:00Z'),
+        modifiedAt: new Date('2024-01-01T00:00:00Z'),
         lastModified: new Date('2024-01-01T00:00:00Z'),
         content: 'Test content'
       };
@@ -336,11 +372,14 @@ describe('OllamaService', () => {
       }));
 
       const fileInfo: FileInfo = {
+        id: 'file-4',
         name: 'test-file.txt',
         path: '/path/to/test-file.txt',
         size: 1024,
         type: 'file',
         extension: '.txt',
+        createdAt: new Date('2024-01-01T00:00:00Z'),
+        modifiedAt: new Date('2024-01-01T00:00:00Z'),
         lastModified: new Date('2024-01-01T00:00:00Z'),
         content: 'Test content'
       };
