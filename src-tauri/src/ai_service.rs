@@ -24,7 +24,6 @@ pub struct AnalysisResult {
     pub tags: Vec<String>,
 }
 
-
 #[allow(dead_code)]
 pub struct OllamaService {
     client: Client,
